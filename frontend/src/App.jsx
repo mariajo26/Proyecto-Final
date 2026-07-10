@@ -125,14 +125,34 @@ export default function App() {
   };
 
   const VistaHorarioClasesEstudiante = () => {
-    const hijos = [
-      { codigo_ua: 'UA-26501', nombre: 'José Ortega', avatarColor: '#3B82F6', iniciales: 'JO' },
-      { codigo_ua: 'UA-26502', nombre: 'Andrea Méndez', avatarColor: '#10B981', iniciales: 'AM' }
-    ];
+    const [hijos, setHijos] = React.useState([]);
+    const [hijoSeleccionado, setHijoSeleccionado] = React.useState(null);
 
-    const [hijoSeleccionado, setHijoSeleccionado] = useState(hijos[0]);
+    React.useEffect(() => {
+      if (usuario.rol === 'Encargado' && token) {
+        fetch('/api/calificaciones/tutor/estudiantes', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            const mappedHijos = data.map(h => ({
+              codigo_ua: h.codigo_ua,
+              nombre: h.nombre_completo,
+              avatarColor: h.codigo_ua === 'UA-26501' ? '#3B82F6' : '#10B981',
+              iniciales: h.nombre_completo.split(' ').map(n => n[0]).join('')
+            }));
+            setHijos(mappedHijos);
+            if (mappedHijos.length > 0) {
+              setHijoSeleccionado(mappedHijos[0]);
+            }
+          }
+        })
+        .catch(err => console.error('Error al obtener hijos del encargado:', err));
+      }
+    }, [token]);
 
-    const activeUa = usuario.rol === 'Encargado' ? hijoSeleccionado.codigo_ua : usuario.codigo_ua;
+    const activeUa = usuario.rol === 'Encargado' ? (hijoSeleccionado ? hijoSeleccionado.codigo_ua : '') : usuario.codigo_ua;
 
     const HORARIOS_POR_ESTUDIANTE = {
       'UA-26501': [
@@ -155,7 +175,7 @@ export default function App() {
 
     return (
       <div>
-        {usuario.rol === 'Encargado' && (
+        {usuario.rol === 'Encargado' && hijos.length > 0 && hijoSeleccionado && (
           <div style={{
             display: 'flex',
             alignItems: 'center',

@@ -46,7 +46,7 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
             // { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'circulares', label: 'Circulares y Firmas', icon: 'draw' },
             { id: 'foros_padres', label: 'Foro de Padres', icon: 'forum' },
-            { id: 'incidentes', label: 'Reportes y Citas', icon: 'campaign' }
+            // { id: 'incidentes', label: 'Reportes y Citas', icon: 'campaign' }
         ],
         Estudiante: [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
