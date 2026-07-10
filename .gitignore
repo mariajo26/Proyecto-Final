@@ -19,9 +19,7 @@ frontend/.env
 # ===========================
 # Build / Dist
 # ===========================
-dist/
 build/
-frontend/dist/
 frontend/build/
 
 # ===========================
