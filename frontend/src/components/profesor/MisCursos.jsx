@@ -128,33 +128,66 @@ export default function MisCursos() {
     // =========================================================================
     if (cargandoCursos) {
         return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", gap: "16px" }}>
-                <span className="material-icons-outlined" style={{ fontSize: "48px", color: "#3B82F6", animation: "spin 1.5s linear infinite" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "350px", gap: "16px", fontFamily: "var(--stitch-font)" }}>
+                <span className="material-icons-outlined" style={{ fontSize: "52px", color: "var(--stitch-secondary)", animation: "spin 1.5s linear infinite" }}>
                     sync
                 </span>
-                <p style={{ color: "var(--stitch-text-secondary)", fontWeight: "500" }}>
-                    Cargando tus cursos asignados...
+                <p style={{ color: "var(--stitch-text-secondary)", fontWeight: "600", fontSize: "15px", margin: 0 }}>
+                    Cargando cursos asignados...
                 </p>
             </div>
         );
     }
 
-    // =========================================================================
-    // RENDER: Error al cargar cursos
-    // =========================================================================
     if (errorCursos) {
         return (
-            <div style={{ backgroundColor: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "8px", padding: "20px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                <span className="material-icons-outlined" style={{ color: "#DC2626", marginTop: "2px" }}>error_outline</span>
-                <div>
-                    <p style={{ fontWeight: "600", color: "#991B1B", marginBottom: "4px" }}>No se pudieron cargar los cursos</p>
-                    <p style={{ color: "#DC2626", fontSize: "14px" }}>{errorCursos}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        style={{ marginTop: "12px", padding: "8px 16px", backgroundColor: "#DC2626", color: "#FFFFFF", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "600", fontSize: "13px" }}
-                    >
-                        Reintentar
-                    </button>
+            <div 
+                className="stitch-card" 
+                style={{ 
+                    padding: "32px", 
+                    backgroundColor: "rgba(239, 68, 68, 0.04)", 
+                    border: "1.5px solid rgba(239, 68, 68, 0.15)", 
+                    borderRadius: "var(--stitch-radius-md)",
+                    fontFamily: "var(--stitch-font)",
+                    maxWidth: "600px",
+                    margin: "40px auto",
+                    boxShadow: "var(--stitch-shadow-sm)"
+                }}
+            >
+                <div style={{ display: "flex", gap: "16px" }}>
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "50%",
+                        backgroundColor: "rgba(239, 68, 68, 0.1)",
+                        color: "#DC2626"
+                    }}>
+                        <span className="material-icons-outlined" style={{ fontSize: "28px" }}>error_outline</span>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <h3 style={{ margin: "0 0 8px 0", color: "#991B1B", fontWeight: "700", fontSize: "18px" }}>
+                            Error de Conexión
+                        </h3>
+                        <p style={{ color: "#DC2626", fontSize: "14px", lineHeight: "1.6", margin: "0 0 16px 0" }}>
+                            No se pudieron cargar los cursos. Esto ocurre si el servidor backend local no está encendido o si hay problemas en la base de datos local.
+                            <br />
+                            <strong style={{ fontSize: "12px", fontFamily: "monospace", display: "block", marginTop: "8px" }}>Detalle técnico: {errorCursos}</strong>
+                        </p>
+                        
+                        <div style={{ display: "flex", gap: "12px" }}>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="stitch-button"
+                                style={{ backgroundColor: "#DC2626" }}
+                            >
+                                <span className="material-icons-outlined" style={{ fontSize: "18px" }}>refresh</span>
+                                Reintentar Carga
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -232,12 +265,37 @@ export default function MisCursos() {
     // =========================================================================
     return (
         <div>
-            <h2 style={{ color: "var(--stitch-primary)", fontWeight: "700", marginBottom: "8px" }}>
-                Mis Cursos Asignados
-            </h2>
-            <p style={{ color: "var(--stitch-text-secondary)", fontSize: "14px", marginBottom: "24px" }}>
-                Selecciona un curso para gestionar asistencias, notas o tareas.
-            </p>
+            <div style={{
+                background: 'linear-gradient(135deg, var(--stitch-primary) 0%, #1e40af 100%)',
+                color: '#FFFFFF',
+                padding: '28px 32px',
+                borderRadius: 'var(--stitch-radius-md)',
+                marginBottom: '32px',
+                boxShadow: 'var(--stitch-shadow-lg)',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                    <h2 style={{ color: '#FFFFFF', fontWeight: '800', margin: '0 0 6px 0', fontSize: '24px', fontFamily: 'Outfit, sans-serif' }}>
+                        Mis Cursos Asignados
+                    </h2>
+                    <p style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: '14px', margin: 0, fontWeight: '500' }}>
+                        Docente UA: Planifica clases, gestiona asistencia por período y realiza el seguimiento escolar.
+                    </p>
+                </div>
+                <div style={{
+                    position: 'absolute',
+                    right: '-40px',
+                    bottom: '-40px',
+                    fontSize: '180px',
+                    color: 'rgba(255, 255, 255, 0.05)',
+                    fontFamily: 'Material Icons Outlined',
+                    userSelect: 'none',
+                    pointerEvents: 'none'
+                }}>
+                    school
+                </div>
+            </div>
 
             {cursos.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "48px", color: "var(--stitch-text-secondary)" }}>
@@ -245,7 +303,7 @@ export default function MisCursos() {
                     No tienes cursos asignados en este momento.
                 </div>
             ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "24px" }}>
                     {cursos.map((curso) => (
                         <CourseCard
                             key={curso.id}
@@ -263,9 +321,9 @@ export default function MisCursos() {
                                 if (action === "asistencia") {
                                     abrirAsistenciaCurso(curso);
                                 } else if (action === "tareas") {
-                                    alert(`Modulo de Tareas para ${curso.materia_nombre} — en desarrollo.`);
+                                    alert(`Módulo de Tareas para ${curso.materia_nombre} — en desarrollo.`);
                                 } else if (action === "notas") {
-                                    alert(`Modulo de Calificaciones para ${curso.materia_nombre} — en desarrollo.`);
+                                    alert(`Módulo de Calificaciones para ${curso.materia_nombre} — en desarrollo.`);
                                 }
                             }}
                         />

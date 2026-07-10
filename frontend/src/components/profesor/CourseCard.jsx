@@ -16,17 +16,17 @@ export default function CourseCard({ course, onSelectAction }) {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        height: '240px',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+        height: '255px',
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
     };
 
     const headerColorStyle = {
         height: '10px',
-        backgroundColor: color_hex || '#3B82F6'
+        background: `linear-gradient(90deg, ${color_hex || '#3B82F6'} 0%, var(--stitch-secondary) 100%)`
     };
 
     const contentStyle = {
-        padding: '20px',
+        padding: '24px',
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -34,10 +34,11 @@ export default function CourseCard({ course, onSelectAction }) {
     };
 
     const subjectStyle = {
-        fontSize: '18px',
-        fontWeight: 'bold',
+        fontSize: '20px',
+        fontWeight: '800',
         color: 'var(--stitch-primary)',
-        margin: '0 0 4px 0'
+        margin: '0 0 6px 0',
+        fontFamily: 'Outfit, sans-serif'
     };
 
     const detailsStyle = {
@@ -45,15 +46,16 @@ export default function CourseCard({ course, onSelectAction }) {
         color: 'var(--stitch-text-secondary)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px',
+        gap: '6px',
         marginTop: '8px'
     };
 
     const actionContainerStyle = {
         display: 'flex',
         borderTop: '1px solid var(--stitch-border)',
-        height: '50px',
-        backgroundColor: '#F8FAFC'
+        height: '52px',
+        backgroundColor: '#F8FAFC',
+        overflow: 'hidden'
     };
 
     const actionButtonStyle = {
@@ -65,11 +67,17 @@ export default function CourseCard({ course, onSelectAction }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '2px',
+        gap: '3px',
         color: 'var(--stitch-text-primary)',
         fontSize: '11px',
-        fontWeight: '500',
-        transition: 'background-color 0.2s ease, color 0.2s ease'
+        fontWeight: '600',
+        transition: 'all 0.2s ease'
+    };
+
+    const highlightButtonStyle = {
+        ...actionButtonStyle,
+        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+        color: 'var(--stitch-secondary)',
     };
 
     const badgeStyle = {
@@ -86,7 +94,18 @@ export default function CourseCard({ course, onSelectAction }) {
     };
 
     return (
-        <div style={cardStyle} className="stitch-transition">
+        <div 
+            style={cardStyle} 
+            className="stitch-transition"
+            onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 12px 24px -5px rgba(13, 44, 84, 0.12)';
+            }}
+            onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'var(--stitch-shadow-lg)';
+            }}
+        >
             {/* Cabecera de Color Temático */}
             <div style={headerColorStyle}></div>
 
@@ -101,20 +120,20 @@ export default function CourseCard({ course, onSelectAction }) {
             <div style={contentStyle}>
                 <div>
                     <h3 style={subjectStyle}>{materia_nombre}</h3>
-                    <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--stitch-secondary)' }}>
-                        {grado_nombre} - Seccion "{seccion_nombre}"
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--stitch-secondary)', fontFamily: 'Outfit, sans-serif' }}>
+                        {grado_nombre} — Sección "{seccion_nombre}"
                     </div>
                 </div>
 
                 <div style={detailsStyle}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="material-icons-outlined" style={{ fontSize: '16px' }}>room</span>
-                        Salón: {salon}
-                    </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span className="material-icons-outlined" style={{ fontSize: '16px' }}>fingerprint</span>
-                        Código de Curso: CUR-{id}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span className="material-icons-outlined" style={{ fontSize: '18px', color: 'var(--stitch-secondary)' }}>room</span>
+                        <span>Salón: <strong>{salon}</strong></span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span className="material-icons-outlined" style={{ fontSize: '18px', color: 'var(--stitch-secondary)' }}>fingerprint</span>
+                        <span style={{ fontSize: '11px', letterSpacing: '0.3px' }}>ID CURSO: <strong>CUR-{id}</strong></span>
+                    </div>
                 </div>
             </div>
 
@@ -123,8 +142,7 @@ export default function CourseCard({ course, onSelectAction }) {
                 <button 
                     style={actionButtonStyle} 
                     onClick={() => onSelectAction(id, 'tareas')}
-                    className="stitch-transition"
-                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#E2E8F0'; e.currentTarget.style.color = 'var(--stitch-secondary)'; }}
+                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(13, 44, 84, 0.05)'; e.currentTarget.style.color = 'var(--stitch-primary)'; }}
                     onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--stitch-text-primary)'; }}
                 >
                     <span className="material-icons-outlined" style={{ fontSize: '18px' }}>assignment</span>
@@ -136,8 +154,7 @@ export default function CourseCard({ course, onSelectAction }) {
                 <button 
                     style={actionButtonStyle} 
                     onClick={() => onSelectAction(id, 'notas')}
-                    className="stitch-transition"
-                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#E2E8F0'; e.currentTarget.style.color = 'var(--stitch-secondary)'; }}
+                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(13, 44, 84, 0.05)'; e.currentTarget.style.color = 'var(--stitch-primary)'; }}
                     onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--stitch-text-primary)'; }}
                 >
                     <span className="material-icons-outlined" style={{ fontSize: '18px' }}>grade</span>
@@ -147,14 +164,13 @@ export default function CourseCard({ course, onSelectAction }) {
                 <div style={{ width: '1px', backgroundColor: 'var(--stitch-border)' }}></div>
 
                 <button 
-                    style={actionButtonStyle} 
+                    style={highlightButtonStyle} 
                     onClick={() => onSelectAction(id, 'asistencia')}
-                    className="stitch-transition"
-                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#E2E8F0'; e.currentTarget.style.color = 'var(--stitch-secondary)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--stitch-text-primary)'; }}
+                    onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'var(--stitch-secondary)'; e.currentTarget.style.color = '#FFFFFF'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.05)'; e.currentTarget.style.color = 'var(--stitch-secondary)'; }}
                 >
                     <span className="material-icons-outlined" style={{ fontSize: '18px' }}>done_all</span>
-                    <span>Asistencias</span>
+                    <span style={{ fontWeight: '700' }}>Asistencias</span>
                 </button>
             </div>
         </div>
