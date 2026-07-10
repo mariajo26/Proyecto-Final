@@ -88,6 +88,14 @@ try {
 }
 
 // Arrancar el proceso de conexion y escucha
-connectDatabases();
+if (!process.env.VERCEL) {
+    connectDatabases();
+} else {
+    initializeDatabases().then(() => {
+        console.log('[VERCEL] Conexión de base de datos lista.');
+    }).catch(err => {
+        console.error('[VERCEL] Error de conexión de base de datos:', err);
+    });
+}
 
 module.exports = app;
