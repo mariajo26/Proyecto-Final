@@ -116,7 +116,12 @@ export default function App() {
   }
 
   if (!usuario) {
-    return <Login onLoginSuccess={login} />;
+    const handleLoginSuccess = (user, token) => {
+      login(user, token);
+      setActiveTab('inicio');
+      navigate('/');
+    };
+    return <Login onLoginSuccess={handleLoginSuccess} />;
   }
 
   // Datos de usuario verificados dinámicamente desde el contexto de autenticación.
