@@ -244,8 +244,17 @@ export default function PeriodAttendance({ courseId, students = [], onSaveAttend
                         return (
                             <tr key={student.id}>
                                 <td style={tdStyle}>
-                                    <div style={{ fontWeight: 'bold' }}>{student.nombre}</div>
-                                    <div style={{ fontSize: '11px', color: 'var(--stitch-text-secondary)', marginTop: '2px' }}>{student.codigo_ua}</div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <img 
+                                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(student.nombre)}&background=0D2C54&color=fff&bold=true&rounded=true&size=36`} 
+                                            alt={student.nombre}
+                                            style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1px solid var(--stitch-border)' }}
+                                        />
+                                        <div>
+                                            <div style={{ fontWeight: 'bold', color: 'var(--stitch-text-primary)' }}>{student.nombre}</div>
+                                            <div style={{ fontSize: '11px', color: 'var(--stitch-text-secondary)', marginTop: '2px' }}>{student.codigo_ua}</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td style={tdStyle}>
                                     <span style={chipStyle(generalState)}>{generalState}</span>

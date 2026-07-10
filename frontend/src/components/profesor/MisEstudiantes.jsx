@@ -1,6 +1,68 @@
 import React, { useState } from 'react';
 import '../../styles/StTheme.css';
 
+// Componente para Badges de Asistencia Premium al estilo Stitch UI
+function AsistenciaBadge({ estado }) {
+    let label = '-';
+    let bgColor = '#F1F5F9';
+    let textColor = '#64748B';
+    let borderColor = '#E2E8F0';
+    let icon = null;
+
+    if (estado === 'Presente' || estado === 'P') {
+        label = 'Presente';
+        bgColor = 'rgba(16, 185, 129, 0.08)';
+        textColor = '#059669';
+        borderColor = 'rgba(16, 185, 129, 0.2)';
+        icon = 'check_circle';
+    } else if (estado === 'No Asistió' || estado === 'Ausente' || estado === 'F' || estado === 'Falta') {
+        label = 'Falta';
+        bgColor = 'rgba(239, 68, 68, 0.08)';
+        textColor = '#DC2626';
+        borderColor = 'rgba(239, 68, 68, 0.2)';
+        icon = 'cancel';
+    } else if (estado === 'Llegada Tarde' || estado === 'T' || estado === 'Tarde') {
+        label = 'Tarde';
+        bgColor = 'rgba(245, 158, 11, 0.08)';
+        textColor = '#D97706';
+        borderColor = 'rgba(245, 158, 11, 0.2)';
+        icon = 'schedule';
+    } else if (estado === 'Inasistencia Programada' || estado === 'Preprogramada') {
+        label = 'Permiso';
+        bgColor = 'rgba(99, 102, 241, 0.08)';
+        textColor = '#4F46E5';
+        borderColor = 'rgba(99, 102, 241, 0.2)';
+        icon = 'event_busy';
+    }
+
+    if (label === '-') {
+        return <span style={{ color: '#94A3B8', fontWeight: '500' }}>-</span>;
+    }
+
+    return (
+        <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 12px',
+            borderRadius: '20px',
+            backgroundColor: bgColor,
+            color: textColor,
+            border: `1.5px solid ${borderColor}`,
+            fontSize: '12px',
+            fontWeight: '600',
+            boxShadow: 'var(--stitch-shadow-sm)',
+            justifyContent: 'center',
+            width: 'fit-content'
+        }}>
+            <span className="material-icons-outlined" style={{ fontSize: '15px', color: 'inherit' }}>
+                {icon}
+            </span>
+            <span style={{ fontSize: '11px', fontWeight: '700' }}>{label}</span>
+        </div>
+    );
+}
+
 export default function MisEstudiantes() {
     // -------------------------------------------------------------------------
     // MOCK DATA (Para simular la carga desde el backend)
@@ -14,6 +76,7 @@ export default function MisEstudiantes() {
     // Estado de la pestaña activa
     const [activeTab, setActiveTab] = useState('listado');
     const [mensaje, setMensaje] = useState('');
+    const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
 
     // Estado del Formulario de Programadas
     const [progStudent, setProgStudent] = useState('');
@@ -60,18 +123,138 @@ export default function MisEstudiantes() {
     
     const renderListado = () => (
         <div>
-            <h3 style={{ marginBottom: '16px', color: 'var(--stitch-primary)' }}>Listado de Estudiantes Asignados</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-                {alumnos.map(al => (
-                    <div key={al.id} style={{ border: '1px solid var(--stitch-border)', padding: '16px', borderRadius: '8px', backgroundColor: '#FFF' }}>
-                        <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{al.nombre}</div>
-                        <div style={{ color: 'var(--stitch-text-secondary)', fontSize: '12px' }}>{al.codigo}</div>
-                        <div style={{ marginTop: '12px', fontSize: '12px', fontWeight: '500', color: al.estadoGeneral === 'Presente' ? '#10B981' : '#64748B' }}>
-                            Estado actual: {al.estadoGeneral}
-                        </div>
-                    </div>
-                ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3 style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '700' }}>Listado de Estudiantes Asignados</h3>
+                <div style={{ 
+                    display: 'flex', 
+                    gap: '4px', 
+                    backgroundColor: '#F1F5F9', 
+                    padding: '4px', 
+                    borderRadius: '10px', 
+                    border: '1px solid var(--stitch-border)' 
+                }}>
+                    <button 
+                        onClick={() => setViewMode('grid')}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '6px 12px',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            backgroundColor: viewMode === 'grid' ? '#FFFFFF' : 'transparent',
+                            color: viewMode === 'grid' ? 'var(--stitch-primary)' : 'var(--stitch-text-secondary)',
+                            fontWeight: '600',
+                            fontSize: '13px',
+                            boxShadow: viewMode === 'grid' ? 'var(--stitch-shadow-sm)' : 'none',
+                            transition: 'all 0.2s ease'
+                        }}
+                    >
+                        <span className="material-icons-outlined" style={{ fontSize: '18px', marginRight: '6px' }}>grid_view</span>
+                        Tarjetas
+                    </button>
+                    <button 
+                        onClick={() => setViewMode('list')}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '6px 12px',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            backgroundColor: viewMode === 'list' ? '#FFFFFF' : 'transparent',
+                            color: viewMode === 'list' ? 'var(--stitch-primary)' : 'var(--stitch-text-secondary)',
+                            fontWeight: '600',
+                            fontSize: '13px',
+                            boxShadow: viewMode === 'list' ? 'var(--stitch-shadow-sm)' : 'none',
+                            transition: 'all 0.2s ease'
+                        }}
+                    >
+                        <span className="material-icons-outlined" style={{ fontSize: '18px', marginRight: '6px' }}>view_list</span>
+                        Lista
+                    </button>
+                </div>
             </div>
+
+            {viewMode === 'grid' ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                    {alumnos.map(al => (
+                        <div 
+                            key={al.id} 
+                            className="stitch-card stitch-transition" 
+                            style={{ 
+                                padding: '20px', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '16px',
+                                background: 'var(--stitch-surface)' 
+                            }}
+                        >
+                            <img 
+                                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(al.nombre)}&background=0D2C54&color=fff&bold=true&rounded=true&size=48`} 
+                                alt={al.nombre}
+                                style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid var(--stitch-border)' }}
+                            />
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: '700', fontSize: '16px', color: 'var(--stitch-text-primary)' }}>{al.nombre}</div>
+                                <div style={{ color: 'var(--stitch-text-secondary)', fontSize: '12px', marginTop: '2px' }}>Código: {al.codigo}</div>
+                                <div style={{ 
+                                    marginTop: '8px', 
+                                    fontSize: '11px', 
+                                    fontWeight: '600', 
+                                    display: 'inline-block',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px',
+                                    backgroundColor: al.estadoGeneral === 'Presente' ? 'rgba(16, 185, 129, 0.1)' : al.estadoGeneral === 'Preprogramada' ? 'rgba(99, 102, 241, 0.1)' : 'rgba(100, 116, 139, 0.1)',
+                                    color: al.estadoGeneral === 'Presente' ? '#059669' : al.estadoGeneral === 'Preprogramada' ? '#4F46E5' : '#475569'
+                                }}>
+                                    {al.estadoGeneral}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {alumnos.map(al => (
+                        <div 
+                            key={al.id} 
+                            className="stitch-card stitch-transition" 
+                            style={{ 
+                                padding: '12px 20px', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'space-between',
+                                background: 'var(--stitch-surface)' 
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                <img 
+                                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(al.nombre)}&background=0D2C54&color=fff&bold=true&rounded=true&size=40`} 
+                                    alt={al.nombre}
+                                    style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid var(--stitch-border)' }}
+                                />
+                                <div>
+                                    <div style={{ fontWeight: '700', fontSize: '16px', color: 'var(--stitch-text-primary)' }}>{al.nombre}</div>
+                                    <div style={{ color: 'var(--stitch-text-secondary)', fontSize: '12px', marginTop: '2px' }}>Código: {al.codigo}</div>
+                                </div>
+                            </div>
+                            <div style={{ 
+                                fontSize: '12px', 
+                                fontWeight: '600', 
+                                padding: '4px 10px',
+                                borderRadius: '12px',
+                                backgroundColor: al.estadoGeneral === 'Presente' ? 'rgba(16, 185, 129, 0.1)' : al.estadoGeneral === 'Preprogramada' ? 'rgba(99, 102, 241, 0.1)' : 'rgba(100, 116, 139, 0.1)',
+                                color: al.estadoGeneral === 'Presente' ? '#059669' : al.estadoGeneral === 'Preprogramada' ? '#4F46E5' : '#475569'
+                            }}>
+                                {al.estadoGeneral}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 
@@ -84,22 +267,50 @@ export default function MisEstudiantes() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC' }}>Alumno</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC' }}>Estado Actual</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC' }}>Nueva Asistencia General</th>
+                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Alumno</th>
+                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Estado Actual</th>
+                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Nueva Asistencia General</th>
                     </tr>
                 </thead>
                 <tbody>
                     {alumnos.map(al => (
                         <tr key={al.id}>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)' }}>
-                                <strong>{al.nombre}</strong><br/>
-                                <span style={{ fontSize: '11px', color: '#64748B' }}>{al.codigo}</span>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <img 
+                                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(al.nombre)}&background=0D2C54&color=fff&bold=true&rounded=true&size=36`} 
+                                    alt={al.nombre}
+                                    style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1px solid var(--stitch-border)' }}
+                                />
+                                <div>
+                                    <strong style={{ color: 'var(--stitch-text-primary)' }}>{al.nombre}</strong><br/>
+                                    <span style={{ fontSize: '11px', color: 'var(--stitch-text-secondary)' }}>{al.codigo}</span>
+                                </div>
                             </td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', fontSize: '13px' }}>{al.estadoGeneral}</td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', fontSize: '13px' }}>
+                                <span style={{ 
+                                    fontSize: '11px', 
+                                    fontWeight: '600', 
+                                    padding: '4px 10px',
+                                    borderRadius: '12px',
+                                    backgroundColor: al.estadoGeneral === 'Presente' ? 'rgba(16, 185, 129, 0.1)' : al.estadoGeneral === 'Preprogramada' ? 'rgba(99, 102, 241, 0.1)' : 'rgba(100, 116, 139, 0.1)',
+                                    color: al.estadoGeneral === 'Presente' ? '#059669' : al.estadoGeneral === 'Preprogramada' ? '#4F46E5' : '#475569'
+                                }}>
+                                    {al.estadoGeneral}
+                                </span>
+                            </td>
                             <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)' }}>
                                 <select 
-                                    style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #CBD5E1' }}
+                                    style={{ 
+                                        padding: '8px 12px', 
+                                        borderRadius: '8px', 
+                                        border: '1px solid var(--stitch-border)',
+                                        color: 'var(--stitch-text-primary)',
+                                        fontWeight: '500',
+                                        fontSize: '13px',
+                                        backgroundColor: '#FFFFFF',
+                                        cursor: 'pointer',
+                                        outline: 'none'
+                                    }}
                                     value={al.estadoGeneral}
                                     onChange={(e) => {
                                         const newVal = e.target.value;
@@ -172,42 +383,86 @@ export default function MisEstudiantes() {
         <div className="print-section">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <div>
-                    <h3 style={{ color: 'var(--stitch-primary)' }}>Reporte Semanal de Asistencias</h3>
-                    <p style={{ color: 'var(--stitch-text-secondary)', fontSize: '14px' }}>Semana del 11 al 15 de Octubre</p>
+                    <h3 style={{ color: 'var(--stitch-primary)', margin: 0, fontWeight: '700' }}>Reporte Semanal de Asistencias</h3>
+                    <p style={{ color: 'var(--stitch-text-secondary)', fontSize: '14px', marginTop: '4px' }}>Semana del 11 al 15 de Octubre</p>
                 </div>
                 <button className="stitch-button hide-on-print" onClick={handleImprimir} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span className="material-icons-outlined" style={{ fontSize: '18px' }}>print</span>
                     Imprimir Reporte
                 </button>
             </div>
-
-            <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid var(--stitch-border)' }}>
+ 
+            <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid var(--stitch-border)', borderRadius: '8px', overflow: 'hidden' }}>
                 <thead>
                     <tr>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC' }}>Alumno</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC' }}>Lunes</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC' }}>Martes</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC' }}>Miércoles</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC' }}>Jueves</th>
-                        <th style={{ padding: '12px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC' }}>Viernes</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'left', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Alumno</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Lunes</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Martes</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Miércoles</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Jueves</th>
+                        <th style={{ padding: '12px 16px', borderBottom: '2px solid var(--stitch-border)', textAlign: 'center', backgroundColor: '#F8FAFC', color: 'var(--stitch-primary)', fontWeight: '600' }}>Viernes</th>
                     </tr>
                 </thead>
                 <tbody>
                     {alumnos.map(al => (
                         <tr key={al.id}>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)' }}>
-                                <strong>{al.nombre}</strong>
+                            <td style={{ padding: '12px 16px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <img 
+                                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(al.nombre)}&background=0D2C54&color=fff&bold=true&rounded=true&size=32`} 
+                                    alt={al.nombre}
+                                    style={{ width: '32px', height: '32px', borderRadius: '50%', border: '1px solid var(--stitch-border)' }}
+                                />
+                                <strong style={{ color: 'var(--stitch-text-primary)' }}>{al.nombre}</strong>
                             </td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', color: '#10B981' }}>P</td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', color: '#10B981' }}>P</td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', color: al.estadoGeneral === 'Presente' ? '#10B981' : '#EF4444' }}>{al.estadoGeneral === 'Presente' ? 'P' : 'F'}</td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center', color: '#94A3B8' }}>-</td>
-                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', textAlign: 'center', color: '#94A3B8' }}>-</td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center' }}>
+                                <AsistenciaBadge estado="Presente" />
+                            </td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center' }}>
+                                <AsistenciaBadge estado="Presente" />
+                            </td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center' }}>
+                                <AsistenciaBadge estado={al.estadoGeneral === 'Preprogramada' ? 'Inasistencia Programada' : al.estadoGeneral === 'Presente' ? 'Presente' : 'Falta'} />
+                            </td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', borderRight: '1px solid var(--stitch-border)', textAlign: 'center' }}>
+                                <AsistenciaBadge estado="Sin Registro" />
+                            </td>
+                            <td style={{ padding: '12px', borderBottom: '1px solid var(--stitch-border)', textAlign: 'center' }}>
+                                <AsistenciaBadge estado="Sin Registro" />
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
+            {/* Leyenda Explicativa de Badges */}
+            <div className="hide-on-print" style={{ 
+                marginTop: '24px', 
+                padding: '16px', 
+                backgroundColor: 'var(--stitch-background)', 
+                borderRadius: '8px', 
+                border: '1px solid var(--stitch-border)' 
+            }}>
+                <h4 style={{ margin: '0 0 12px 0', color: 'var(--stitch-primary)', fontSize: '13px', fontWeight: '700' }}>Leyenda del Reporte Semanal</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <AsistenciaBadge estado="Presente" />
+                        <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>Asistió a clases</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <AsistenciaBadge estado="Falta" />
+                        <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>Inasistencia (Injustificada)</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <AsistenciaBadge estado="Tarde" />
+                        <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>Llegada tarde a período</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <AsistenciaBadge estado="Preprogramada" />
+                        <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>Permiso programado o médico</span>
+                    </div>
+                </div>
+            </div>
+ 
             <div className="show-on-print-only" style={{ display: 'none', marginTop: '40px', textAlign: 'center' }}>
                 <p>____________________________________</p>
                 <p style={{ fontSize: '14px', color: '#64748B' }}>Firma del Profesor Guía</p>
