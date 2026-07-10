@@ -70,3 +70,10 @@ coverage/
 # ===========================
 .cache/
 *.tgz
+
+# ===========================
+# PERSONALES
+# ===========================
+./DESIGN.md
+./implementaciones.md
+./prompt.md
