@@ -346,12 +346,14 @@ Ocupa todo el espacio restante de la pantalla y se organiza de arriba hacia abaj
   - **Asignación de Porcentajes de Penalización:** Permite asignar la nota máxima para cada rango configurado (Ej: Nivel 1 al 75%, Nivel 2 al 50%, Nivel 3 al 25%).
   - **Configuración de Estado Intolerable:** Permite activar y ajustar la regla para entregas fuera de todo el tiempo de prórroga permitido, donde la actividad se bloquea automáticamente bajo la nota mínima obligatoria del 10% del total.
 
-- **Banco y Plantillas de Rúbricas**
+<!-- - **Banco y Plantillas de Rúbricas**
   - Panel de diseño para crear categorías de evaluación estables o utilizarlas como plantillas predeterminadas en sus tareas.
   - **Creador de Criterios:** Permite agregar los campos, descripciones y ponderaciones que el docente requiera de forma libre.
-  - **Escalas de Desempeño:** Herramienta para configurar los niveles de logro (Ej: Excelente, Bien, Deficiente) y asignar el porcentaje exacto que aporta cada categoría a la suma total automática de la rúbrica.
+  - **Escalas de Desempeño:** Herramienta para configurar los niveles de logro (Ej: Excelente, Bien, Deficiente) y asignar el porcentaje exacto que aporta cada categoría a la suma total automática de la rúbrica. -->
 
-- **Planificación de Actividades y Tareas**
+
+----> Ya se encuentra realizado 
+<!-- - **Planificación de Actividades y Tareas**
   - **Creador de Actividades Multitipo:** Formulario para registrar nuevas evaluaciones académicas. Cuenta con campos para Título, Descripción, Recursos Adjuntos, Ponderación, Fecha y Hora exacta de entrega.
   - **Selector de Tipo de Actividad:** Permite clasificar la asignación entre Examen Final, Examen Parcial (con subdivisiones opcionales para evaluaciones Orales, Escritas o Prácticas), Cortos, Hojas de Trabajo, Laboratorios o Tareas Comunes.
   - **Tipos Personalizados:** Opción para que el profesor cree y guarde nuevos tipos de actividades específicos y exclusivos para sus propios cursos (sin alterar los tipos de los demás docentes).
@@ -359,7 +361,7 @@ Ocupa todo el espacio restante de la pantalla y se organiza de arriba hacia abaj
   - **Asignación de Rúbricas:** Permite vincular una rúbrica guardada o estructurar una nueva desde cero para esa actividad específica.
   - **Control de Visibilidad y Permisos:** 
     - Interruptor para cambiar el estado de la tarea entre Visible u Oculta para los alumnos (permite programar fechas automáticas de publicación y visualizacion).
-    - Permite modificar o eliminar la actividad en forma libre en el sistema.
+    - Permite modificar o eliminar la actividad en forma libre en el sistema. -->
 
 - **Centro de Calificaciones (Control de Notas)**
   - Cuadrícula interactiva por curso para ingresar y editar las notas de los alumnos.
@@ -443,7 +445,7 @@ Para agilizar el pase de asistencia y resolver discrepancias, el sistema habilit
     - Si un estudiante asiste al colegio pero el Profesor Guía ya sabe con antelación que el alumno tendrá que retirarse temprano, asistir a una actividad especial o tiene una justificación aprobada por los padres para faltar a ciertos periodos específicos, el Profesor Guía puede preprogramar la **"Inasistencia"** directamente en los cursos correspondientes desde la mañana.
     - Cuando los profesores de esas materias abran el formulario de asistencia de sus respectivos periodos, el alumno ya les aparecerá automáticamente como **"No Asistió" junto con la justificación y la razón escrita** por el Profesor Guía, evitando que el docente de la materia lo marque por error o asuma una falta injustificada.
 
-- **Planificación de Contenidos y Material de Puesta al Día**
+<!-- - **Planificación de Contenidos y Material de Puesta al Día**
   - *Módulo que gestiona el avance programático de las clases y proporciona herramientas pedagógicas automáticas para evitar el retraso escolar en caso de inasistencias:*
   - **1. Vista del Cronograma de Actividades (Exclusivo del Profesor):**
     - Interfaz de planificación estructurada en forma de calendario o línea de tiempo interna.
@@ -455,7 +457,7 @@ Para agilizar el pase de asistencia y resolver discrepancias, el sistema habilit
     - Este control se activa cuando se registra una inasistencia (ya sea en la general o en el periodo de clase) y sirve para mitigar el impacto si el alumno se perdió un examen parcial, una actividad calificada o la explicación del día.
     - **Buzón de Envío de Contingencia:** El sistema detecta qué temas y actividades estaban planificados en el cronograma del docente para esa fecha específica y abre un apartado especial de "Material de Puesta al Día".
     - **Carga de Recursos Complementarios:** El profesor puede adjuntar recursos adicionales dirigidos específicamente al alumno ausente si lo desea (Ej: las páginas del libro de texto que se leyeron, un resumen del tema visto, presentaciones en PDF, videos o notas de la clase).
-    - **Envío Dirigido:** Al guardar el reporte, el sistema empaqueta el material complementario y las tareas programadas de ese día y las envía de forma directa a la plataforma del estudiante y al correo del padre bajo el título de *Itinerario de puesta al día*, asegurando que el alumno tenga las herramientas exactas para nivelarse desde casa sin quedarse atrás en sus calificaciones.
+    - **Envío Dirigido:** Al guardar el reporte, el sistema empaqueta el material complementario y las tareas programadas de ese día y las envía de forma directa a la plataforma del estudiante y al correo del padre bajo el título de *Itinerario de puesta al día*, asegurando que el alumno tenga las herramientas exactas para nivelarse desde casa sin quedarse atrás en sus calificaciones. -->
 
 - **Módulo de Administración Global (Rol: Administrador)**
   - *Panel con control total, absoluto e irrestricto sobre todos los módulos, datos, configuraciones y usuarios de la plataforma.*
