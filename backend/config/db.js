@@ -4,18 +4,20 @@ require('dotenv').config();
 
 // ----------------------------------------------------------------------------
 // 1. CONFIGURACIÓN DE SEQUELIZE (MYSQL)
+// Railway inyecta: MYSQLHOST, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE, MYSQLPORT
+// Variables locales (fallback): MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB, MYSQL_PORT
 // ----------------------------------------------------------------------------
-const dbName = process.env.MYSQL_DB || 'plataforma_estudiantil';
-const dbUser = process.env.MYSQL_USER || 'root';
-const dbPassword = process.env.MYSQL_PASSWORD || '';
-const dbHost = process.env.MYSQL_HOST || 'localhost';
-const dbPort = process.env.MYSQL_PORT || 3306;
+const dbName     = process.env.MYSQLDATABASE || process.env.MYSQL_DB       || 'plataforma_estudiantil';
+const dbUser     = process.env.MYSQLUSER     || process.env.MYSQL_USER      || 'root';
+const dbPassword = process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD  || '';
+const dbHost     = process.env.MYSQLHOST     || process.env.MYSQL_HOST      || 'localhost';
+const dbPort     = parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || '3306', 10);
 
-const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+const sequelizeConfig = {
     host: dbHost,
     port: dbPort,
     dialect: 'mysql',
-    logging: false, // Cambiar a console.log para depuración local
+    logging: false,
     pool: {
         max: 5,
         min: 0,
@@ -23,13 +25,26 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
         idle: 10000
     },
     define: {
-        timestamps: false, // Desactivar marcas de tiempo automáticas globales
-        freezeTableName: true // Evitar la pluralización automática de las tablas
+        timestamps: false,
+        freezeTableName: true
     }
-});
+};
+
+// Railway puede proveer una DATABASE_URL directa (MySQL)
+let sequelize;
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('mysql')) {
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'mysql',
+        logging: false,
+        pool: sequelizeConfig.pool,
+        define: sequelizeConfig.define
+    });
+} else {
+    sequelize = new Sequelize(dbName, dbUser, dbPassword, sequelizeConfig);
+}
 
 // ----------------------------------------------------------------------------
-// 2. CONFIGURACIÓN DE MONGOOSE (MONGODB)
+// 2. CONFIGURACIÓN DE MONGOOSE (MONGODB ATLAS)
 // ----------------------------------------------------------------------------
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/plataforma_estudiantil';
 
@@ -38,30 +53,25 @@ const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/plataform
 // ----------------------------------------------------------------------------
 async function initializeDatabases() {
     try {
-        console.log('Iniciando conexiones concurrentes de bases de datos...');
+        console.log('[DB] Iniciando conexiones concurrentes...');
 
-        // Ejecutar las promesas de conexión de forma concurrente
         const connections = await Promise.all([
             sequelize.authenticate().then(() => {
-                console.log('Conexión a MySQL establecida correctamente (Sequelize).');
+                console.log('[DB] MySQL conectado correctamente.');
                 return 'mysql';
             }),
             mongoose.connect(mongoUri).then(() => {
-                console.log('Conexión a MongoDB establecida correctamente (Mongoose).');
+                console.log('[DB] MongoDB conectado correctamente.');
                 return 'mongodb';
             })
         ]);
 
-        console.log('Ambas bases de datos se han inicializado correctamente:', connections);
+        console.log('[DB] Bases de datos inicializadas:', connections);
         return { sequelize, mongoose };
     } catch (error) {
-        console.error('Error crítico al conectar con las bases de datos:', error);
+        console.error('[DB] Error crítico al conectar:', error.message);
         throw error;
     }
 }
 
-module.exports = {
-    sequelize,
-    mongoose,
-    initializeDatabases
-};
+module.exports = { sequelize, mongoose, initializeDatabases };
