@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import CourseCard from "./CourseCard";
 import PeriodAttendance from "./PeriodAttendance";
@@ -13,6 +14,7 @@ import "../../styles/StTheme.css";
 // ----------------------------------------------------------------------------
 export default function MisCursos() {
     const { token } = useAuth();
+    const navigate = useNavigate();
 
     // Estado de la lista de cursos
     const [cursos, setCursos] = useState([]);
@@ -205,14 +207,15 @@ export default function MisCursos() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
                     <button
                         onClick={() => { setCursoSeleccionado(null); setAlumnos([]); setMensajeGuardado(""); }}
-                        style={{ padding: "8px 16px", borderRadius: "6px", border: "1px solid var(--stitch-border)", backgroundColor: "#FFFFFF", cursor: "pointer", fontWeight: "500", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px" }}
+                        className="stitch-button-secondary"
+                        style={{ padding: "8px 16px" }}
                     >
-                        <span className="material-icons-outlined" style={{ fontSize: "18px" }}>arrow_back</span>
+                        <span className="material-icons-outlined">arrow_back</span>
                         Volver a Mis Cursos
                     </button>
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                        <h2 style={{ color: "var(--stitch-primary)", fontWeight: "700", margin: 0, fontSize: "18px" }}>
+                        <h2 className="stitch-title-font" style={{ color: "var(--stitch-primary)", fontWeight: "700", margin: 0, fontSize: "18px" }}>
                             {cursoSeleccionado.materia_nombre}
                         </h2>
                         <span style={{ color: "var(--stitch-text-secondary)", fontSize: "13px" }}>
@@ -223,8 +226,8 @@ export default function MisCursos() {
 
                 {/* Mensaje de resultado del guardado */}
                 {mensajeGuardado && (
-                    <div style={{ padding: "12px 16px", borderRadius: "8px", marginBottom: "16px", fontWeight: "600", fontSize: "14px", backgroundColor: exito ? "#D1FAE5" : "#FEE2E2", color: exito ? "#065F46" : "#991B1B", display: "flex", alignItems: "center", gap: "8px" }}>
-                        <span className="material-icons-outlined" style={{ fontSize: "18px" }}>
+                    <div className={`stitch-alert ${exito ? 'stitch-alert-success' : 'stitch-alert-danger'}`}>
+                        <span className="material-icons-outlined">
                             {exito ? "check_circle" : "error_outline"}
                         </span>
                         {mensajeGuardado}
@@ -241,11 +244,12 @@ export default function MisCursos() {
 
                 {/* Estado: Error al cargar alumnos */}
                 {errorAlumnos && !cargandoAlumnos && (
-                    <div style={{ backgroundColor: "#FEF2F2", border: "1px solid #FECACA", borderRadius: "8px", padding: "16px", color: "#991B1B", fontSize: "14px", display: "flex", gap: "8px" }}>
+                    <div className="stitch-alert stitch-alert-danger">
                         <span className="material-icons-outlined">error_outline</span>
                         {errorAlumnos}
                     </div>
                 )}
+
 
                 {/* Formulario de asistencia (solo si hay alumnos cargados) */}
                 {!cargandoAlumnos && !errorAlumnos && (
@@ -321,9 +325,11 @@ export default function MisCursos() {
                                 if (action === "asistencia") {
                                     abrirAsistenciaCurso(curso);
                                 } else if (action === "tareas") {
-                                    alert(`Módulo de Tareas para ${curso.materia_nombre} — en desarrollo.`);
+                                    // Navegar a la gestión local de tareas del curso
+                                    navigate('/cursos/tareas', { state: { curso } });
                                 } else if (action === "notas") {
-                                    alert(`Módulo de Calificaciones para ${curso.materia_nombre} — en desarrollo.`);
+                                    // Navegar a la libreta de calificaciones del curso
+                                    navigate('/cursos/notas', { state: { curso } });
                                 }
                             }}
                         />

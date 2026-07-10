@@ -4,8 +4,33 @@ import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import MisCursos from './components/profesor/MisCursos';
 import MisEstudiantes from './components/profesor/MisEstudiantes';
-import UnifiedCalendar from './components/estudiante/UnifiedCalendar';
+import PlanificacionActividades from './components/profesor/PlanificacionActividades';
+import CentroCalificaciones from './components/profesor/CentroCalificaciones';
+import BancoRubricas from './components/profesor/BancoRubricas';
+import GestionTareas from './components/profesor/GestionTareas';
+import LibretaNotasCurso from './components/profesor/LibretaNotasCurso';
+import GestionCasos from './components/profesor/GestionCasos';
+import ForosComunidad from './components/profesor/ForosComunidad';
+import AgendaCitas from './components/profesor/AgendaCitas';
+import HorariosCurso from './components/profesor/HorariosCurso';
+import WeeklyScheduleCalendar from './components/WeeklyScheduleCalendar';
+import RoleCalendar from './components/RoleCalendar';
 import Login from './components/Login';
+import Comunicaciones from './components/Comunicaciones';
+import RendimientoAcademico from './components/encargado/RendimientoAcademico';
+import CircularFirmas from './components/encargado/CircularFirmas';
+import GestionCasosEncargado from './components/encargado/GestionCasos';
+import ForosPadres from './components/encargado/ForosPadres';
+import GestionAlumnos from './components/control/GestionAlumnos';
+import ControlProfesores from './components/control/ControlProfesores';
+import AsistenciaGeneralControl from './components/control/AsistenciaGeneralControl';
+import CircularesControl from './components/control/CircularesControl';
+import IncidentesControl from './components/control/IncidentesControl';
+import ForosControl from './components/control/ForosControl';
+import DashboardEstudiante from './components/estudiante/DashboardEstudiante';
+import MisCursosEstudiante from './components/estudiante/MisCursosEstudiante';
+import MisCalificacionesEstudiante from './components/estudiante/MisCalificacionesEstudiante';
+import MisForosEstudiante from './components/estudiante/MisForosEstudiante';
 import './styles/StTheme.css';
 
 // ----------------------------------------------------------------------------
@@ -97,14 +122,99 @@ export default function App() {
     alert(`[DEMO] Recordatorio personal agregado: "${newEvent.title}" para el ${newEvent.date}`);
   };
 
-  const VistaCalendarioEstudiante = () => {
+  const VistaHorarioClasesEstudiante = () => {
+    const hijos = [
+      { codigo_ua: 'UA-26501', nombre: 'José Ortega', avatarColor: '#3B82F6', iniciales: 'JO' },
+      { codigo_ua: 'UA-26502', nombre: 'Andrea Méndez', avatarColor: '#10B981', iniciales: 'AM' }
+    ];
+
+    const [hijoSeleccionado, setHijoSeleccionado] = useState(hijos[0]);
+
+    const activeUa = usuario.rol === 'Encargado' ? hijoSeleccionado.codigo_ua : usuario.codigo_ua;
+
+    const HORARIOS_POR_ESTUDIANTE = {
+      'UA-26501': [
+        { dia: 'Lunes', periodo: 1, materia: 'Matematica I', grado: 'Decimo Grado A', aula: 'Salon 101' },
+        { dia: 'Lunes', periodo: 2, materia: 'Matematica I', grado: 'Decimo Grado A', aula: 'Salon 101' },
+        { dia: 'Miércoles', periodo: 3, materia: 'Matematica I', grado: 'Decimo Grado A', aula: 'Salon 101' },
+        { dia: 'Jueves', periodo: 4, materia: 'Matematica I', grado: 'Decimo Grado A', aula: 'Salon 101' },
+        { dia: 'Viernes', periodo: 2, materia: 'Matematica I', grado: 'Decimo Grado A', aula: 'Salon 101' }
+      ],
+      'UA-26502': [
+        { dia: 'Lunes', periodo: 3, materia: 'Fisica Fundamental', grado: 'Undecimo Grado B', aula: 'Salon 102' },
+        { dia: 'Martes', periodo: 1, materia: 'Fisica Fundamental', grado: 'Undecimo Grado B', aula: 'Salon 102' },
+        { dia: 'Martes', periodo: 2, materia: 'Fisica Fundamental', grado: 'Undecimo Grado B', aula: 'Salon 102' },
+        { dia: 'Jueves', periodo: 2, materia: 'Fisica Fundamental', grado: 'Undecimo Grado B', aula: 'Salon 102' },
+        { dia: 'Viernes', periodo: 5, materia: 'Fisica Fundamental', grado: 'Undecimo Grado B', aula: 'Salon 102' }
+      ]
+    };
+
+    const currentSchedule = HORARIOS_POR_ESTUDIANTE[activeUa] || HORARIOS_POR_ESTUDIANTE['UA-26501'];
+
     return (
       <div>
-        <h2 style={{ color: 'var(--stitch-primary)', fontWeight: '600', marginBottom: '20px' }}>Mi Calendario Escolar</h2>
-        <UnifiedCalendar
-          initialEvents={[]}
-          onAddPersonalEvent={handleAddPersonalEvent}
+        {usuario.rol === 'Encargado' && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            backgroundColor: '#FFFFFF',
+            padding: '16px',
+            borderRadius: 'var(--stitch-radius-md, 12px)',
+            border: '1px solid var(--stitch-border, #E5E7EB)',
+            boxShadow: 'var(--stitch-shadow-sm)',
+            marginBottom: '20px'
+          }}>
+            <span style={{ fontWeight: '600', color: 'var(--stitch-primary)' }}>Seleccionar Estudiante:</span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {hijos.map(h => (
+                <button
+                  key={h.codigo_ua}
+                  onClick={() => setHijoSeleccionado(h)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 12px',
+                    borderRadius: '20px',
+                    border: hijoSeleccionado.codigo_ua === h.codigo_ua ? '2px solid var(--stitch-primary)' : '1px solid var(--stitch-border)',
+                    backgroundColor: hijoSeleccionado.codigo_ua === h.codigo_ua ? '#EFF6FF' : '#FFFFFF',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <div style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    backgroundColor: h.avatarColor,
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 'bold'
+                  }}>{h.iniciales}</div>
+                  <span>{h.nombre}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <WeeklyScheduleCalendar
+          scheduleData={currentSchedule}
+          title={usuario.rol === 'Encargado' ? `Horario de Clases - ${hijoSeleccionado.nombre}` : "Horario de Clases"}
         />
+      </div>
+    );
+  };
+
+  const VistaCalendarioEscolar = () => {
+    return (
+      <div>
+        <h2 style={{ color: 'var(--stitch-primary)', fontWeight: '600', marginBottom: '20px' }}>Calendario Escolar</h2>
+        <RoleCalendar userRole={usuario.rol} />
       </div>
     );
   };
@@ -153,7 +263,8 @@ export default function App() {
       );
     }
     if (usuario.rol === 'Profesor') return <MisCursos />;
-    return <VistaCalendarioEstudiante />;
+    if (usuario.rol === 'Estudiante') return <DashboardEstudiante />;
+    return <VistaHorarioClasesEstudiante />;
   };
 
   return (
@@ -166,11 +277,35 @@ export default function App() {
       activeTab={activeTab}
       setActiveTab={(tab) => setActiveTab(tab)}
     >
-      <Routes>
+        <Routes>
         <Route path="/" element={renderInicioDashboard()} />
-        <Route path="/cursos" element={usuario.rol === 'Profesor' ? <MisCursos /> : <VistaCreandoEspacio />} />
+        <Route path="/cursos" element={usuario.rol === 'Profesor' ? <MisCursos /> : (usuario.rol === 'Estudiante' ? <MisCursosEstudiante /> : <VistaCreandoEspacio />)} />
+        <Route path="/cursos/tareas" element={usuario.rol === 'Profesor' ? <GestionTareas /> : <VistaCreandoEspacio />} />
+        <Route path="/actividades" element={usuario.rol === 'Profesor' ? <PlanificacionActividades /> : <VistaCreandoEspacio />} />
+        <Route path="/cursos/notas" element={usuario.rol === 'Profesor' ? <LibretaNotasCurso /> : <VistaCreandoEspacio />} />
+        <Route path="/notas" element={usuario.rol === 'Profesor' ? <CentroCalificaciones /> : (usuario.rol === 'Estudiante' ? <MisCalificacionesEstudiante /> : <VistaCreandoEspacio />)} />
+        <Route path="/rubricas" element={usuario.rol === 'Profesor' ? <BancoRubricas /> : <VistaCreandoEspacio />} />
+        <Route path="/horarios" element={usuario.rol === 'Profesor' ? <HorariosCurso /> : (usuario.rol === 'Control Academico' ? <ControlProfesores /> : <VistaHorarioClasesEstudiante />)} />
+        <Route path="/casos" element={usuario.rol === 'Profesor' ? <GestionCasos /> : <VistaCreandoEspacio />} />
+        <Route path="/foros" element={(usuario.rol === 'Profesor' || usuario.rol === 'Estudiante' || usuario.rol === 'Encargado' || usuario.rol === 'Control Academico') ? <ForosComunidad /> : <VistaCreandoEspacio />} />
+        <Route path="/foros_padres" element={usuario.rol === 'Encargado' ? <ForosPadres /> : <VistaCreandoEspacio />} />
+        <Route path="/foros_control" element={usuario.rol === 'Control Academico' ? <ForosControl /> : <VistaCreandoEspacio />} />
+        <Route path="/citas" element={usuario.rol === 'Profesor' ? <AgendaCitas /> : <VistaCreandoEspacio />} />
         <Route path="/mis_estudiantes" element={usuario.rol === 'Profesor' ? <MisEstudiantes /> : <VistaCreandoEspacio />} />
-        <Route path="/calendario" element={(usuario.rol === 'Estudiante' || usuario.rol === 'Encargado') ? <VistaCalendarioEstudiante /> : <VistaCreandoEspacio />} />
+        <Route path="/calendario" element={(usuario.rol === 'Estudiante' || usuario.rol === 'Encargado' || usuario.rol === 'Profesor') ? <VistaCalendarioEscolar /> : <VistaCreandoEspacio />} />
+        <Route path="/rendimiento" element={usuario.rol === 'Encargado' ? <RendimientoAcademico /> : <VistaCreandoEspacio />} />
+        <Route path="/circulares" element={usuario.rol === 'Encargado' ? <CircularFirmas /> : (usuario.rol === 'Control Academico' ? <CircularesControl /> : <VistaCreandoEspacio />)} />
+        <Route path="/incidentes" element={usuario.rol === 'Encargado' ? <GestionCasosEncargado /> : <VistaCreandoEspacio />} />
+        
+        {/* Rutas exclusivas de Secretaría/Administración */}
+        <Route path="/alumnos" element={usuario.rol === 'Control Academico' ? <GestionAlumnos /> : <VistaCreandoEspacio />} />
+        <Route path="/asistencia_gral" element={usuario.rol === 'Control Academico' ? <AsistenciaGeneralControl /> : <VistaCreandoEspacio />} />
+        <Route path="/quejas" element={usuario.rol === 'Control Academico' ? <IncidentesControl /> : <VistaCreandoEspacio />} />
+        
+        {/* Rutas unificadas de mensajería y alertas */}
+        <Route path="/comunicaciones" element={<Comunicaciones defaultTab="chats" />} />
+        <Route path="/notificaciones" element={<Comunicaciones defaultTab="notificaciones" />} />
+        <Route path="/mensajeria" element={<Comunicaciones defaultTab="chats" />} />
 
         {/* Cualquier otra ruta del menu lateral cargara la vista elegantemente construida */}
         <Route path="*" element={<VistaCreandoEspacio />} />

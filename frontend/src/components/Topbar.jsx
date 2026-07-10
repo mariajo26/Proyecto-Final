@@ -27,7 +27,7 @@ export default function Topbar({ userName, userRole, notifications = [], message
     // Estilos del Topbar
     const topbarStyle = {
         height: '70px',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#ffffffff',
         borderBottom: '1px solid var(--stitch-border)',
         display: 'flex',
         alignItems: 'center',

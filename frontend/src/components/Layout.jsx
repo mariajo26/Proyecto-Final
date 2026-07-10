@@ -142,6 +142,7 @@ export default function Layout({ user, onLogout, children, activeTab, setActiveT
             case 'agenda': return 'Mi Agenda de Actividades';
             case 'asistencia': return 'Registro de Asistencias y Faltas';
             case 'mi-perfil': return 'Ficha de Perfil Personal';
+            case 'comunicaciones': return 'Centro de Mensajes y Notificaciones';
             case 'notificaciones': return 'Centro de Alertas y Notificaciones';
             case 'mensajeria': return 'Buzón de Mensajes Directos';
             case 'crear-foro': return 'Crear Espacio de Foro';
@@ -168,7 +169,7 @@ export default function Layout({ user, onLogout, children, activeTab, setActiveT
             />
 
             {/* Barra Superior */}
-            <div style={topbarWrapperStyle}>
+            <div className="no-print" style={topbarWrapperStyle}>
                 <Topbar 
                     userName={user.nombre} 
                     userRole={user.rol} 
@@ -181,13 +182,13 @@ export default function Layout({ user, onLogout, children, activeTab, setActiveT
             {/* Área de Contenido Central */}
             <main style={mainContentStyle}>
                 {/* Ruta de navegación (Breadcrumbs) */}
-                <div style={breadcrumbStyle}>
+                <div className="no-print" style={breadcrumbStyle}>
                     <span className="material-icons-outlined" style={{ fontSize: '14px', marginTop: '-2px' }}>home</span>
                     {getBreadcrumbs()}
                 </div>
 
                 {/* Título de la Página y Acciones Rápidas */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+                <div className="no-print" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
                     <h1 style={titleStyle}>{getPageTitle()}</h1>
                     
                     {/* Botón dinámico "Crear Espacio" exclusivo para Profesor en el módulo de foros */}

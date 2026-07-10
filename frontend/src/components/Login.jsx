@@ -4,6 +4,17 @@ import '../styles/StTheme.css';
 // ----------------------------------------------------------------------------
 // COMPONENTE: PANTALLA DE INICIO DE SESIÓN Y SEGURIDAD (LOGIN + OBLIGATORIO)
 // ----------------------------------------------------------------------------
+// Parsea la respuesta de forma segura sin crashear si el body está vacío
+async function parseSeguro(respuesta) {
+    const texto = await respuesta.text();
+    if (!texto || texto.trim() === '') return {};
+    try {
+        return JSON.parse(texto);
+    } catch {
+        return { error: `Respuesta del servidor no válida (${respuesta.status})` };
+    }
+}
+
 export default function Login({ onLoginSuccess }) {
     const [codigoUa, setCodigoUa] = useState('');
     const [contrasena, setContrasena] = useState('');
@@ -28,10 +39,14 @@ export default function Login({ onLoginSuccess }) {
                 body: JSON.stringify({ codigo_ua: codigoUa, contrasena })
             });
 
-            const datos = await respuesta.json();
+            const datos = await parseSeguro(respuesta);
 
             if (!respuesta.ok) {
-                throw new Error(datos.error || 'Credenciales invalidas');
+                throw new Error(datos.error || `Error del servidor (${respuesta.status})`);
+            }
+
+            if (!datos.token || !datos.usuario) {
+                throw new Error('Respuesta incompleta del servidor. Verifica que el backend esté corriendo.');
             }
 
             // Validar si el usuario requiere cambio obligatorio en su primer ingreso
@@ -64,10 +79,14 @@ export default function Login({ onLoginSuccess }) {
                 })
             });
 
-            const datos = await respuesta.json();
+            const datos = await parseSeguro(respuesta);
 
             if (!respuesta.ok) {
-                throw new Error(datos.error || 'Error al autenticar con Google');
+                throw new Error(datos.error || `Error al autenticar con Google (${respuesta.status})`);
+            }
+
+            if (!datos.token || !datos.usuario) {
+                throw new Error('Respuesta incompleta del servidor. Verifica que el backend esté corriendo.');
             }
 
             if (datos.usuario.es_temporal) {
@@ -110,10 +129,10 @@ export default function Login({ onLoginSuccess }) {
                 body: JSON.stringify({ nueva_contrasena: nuevaContrasena })
             });
 
-            const datos = await respuesta.json();
+            const datos = await parseSeguro(respuesta);
 
             if (!respuesta.ok) {
-                throw new Error(datos.error || 'Error al actualizar contrasena.');
+                throw new Error(datos.error || `Error al actualizar contraseña (${respuesta.status})`);
             }
 
             alert('Contrasena actualizada con exito. Por favor inicia sesion con tus nuevas credenciales.');
@@ -290,15 +309,15 @@ export default function Login({ onLoginSuccess }) {
                         >
                             {cargando ? 'Iniciando sesion...' : 'Entrar'}
                         </button>
-
+{/* 
                         <div style={{ display: 'flex', alignItems: 'center', margin: '24px 0' }}>
                             <div style={{ flex: 1, height: '1px', backgroundColor: '#E2E8F0' }}></div>
                             <span style={{ padding: '0 12px', fontSize: '12px', color: '#94A3B8' }}>O</span>
                             <div style={{ flex: 1, height: '1px', backgroundColor: '#E2E8F0' }}></div>
-                        </div>
+                        </div> */}
 
                         {/* Google Login (QA local bypass) */}
-                        <button
+                        {/* <button
                             type="button"
                             onClick={handleGoogleLogin}
                             disabled={cargando}
@@ -325,7 +344,7 @@ export default function Login({ onLoginSuccess }) {
                                 <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59A9 9 0 0 0 .78 5.05l2.97 2.33a5.52 5.52 0 0 1 8.3-2.93z" />
                             </svg>
                             Ingresar con Google
-                        </button>
+                        </button> */}
                     </form>
                 ) : (
                     /* Formulario de Cambio Obligatorio de Contraseña */

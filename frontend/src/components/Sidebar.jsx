@@ -10,48 +10,49 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
     // Mapeo detallado de opciones de navegación según el rol oficial del usuario autenticado
     const menuOptionsByRole = {
         Administrador: [
-            { id: 'inicio', label: 'Inicio', icon: 'dashboard' },
+            { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'usuarios', label: 'Gestión de Usuarios', icon: 'people' },
             { id: 'cursos', label: 'Cursos y Materias', icon: 'school' },
             { id: 'fichas', label: 'Fichas Médicas/Laborales', icon: 'badge' },
             { id: 'config', label: 'Ajustes del Sistema', icon: 'settings_suggest' }
         ],
         'Control Academico': [
-            { id: 'inicio', label: 'Inicio', icon: 'analytics' },
+            { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'alumnos', label: 'Alumnos y Familias', icon: 'groups' },
             { id: 'horarios', label: 'Personal y Horarios', icon: 'badge' },
             { id: 'asistencia_gral', label: 'Asistencia General', icon: 'done_all' },
             { id: 'circulares', label: 'Circulares y Firmas', icon: 'assignment' },
-            { id: 'quejas', label: 'Atención de Incidentes', icon: 'forum' },
-            { id: 'calendario_inst', label: 'Calendario Institucional', icon: 'calendar_month' },
-            { id: 'foros', label: 'Foro Institucional', icon: 'speaker_notes' }
+            { id: 'quejas', label: 'Atención de Incidentes', icon: 'assignment_late' },
+            { id: 'foros_control', label: 'Foro Institucional', icon: 'forum' }
         ],
         Profesor: [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'cursos', label: 'Mis Cursos', icon: 'class' },
             { id: 'mis_estudiantes', label: 'Mis Estudiantes', icon: 'groups' },
-            { id: 'tolerancia', label: 'Tolerancia y Retrasos', icon: 'timer' },
+            { id: 'horarios', label: 'Horarios de Curso', icon: 'calendar_today' },
+            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'rubricas', label: 'Banco de Rúbricas', icon: 'assessment' },
             { id: 'actividades', label: 'Planificación Actividades', icon: 'event_note' },
             { id: 'notas', label: 'Centro Calificaciones', icon: 'grade' },
-            { id: 'justificaciones', label: 'Buzón Justificaciones', icon: 'verified' },
-            { id: 'citas', label: 'Módulo Comunicación', icon: 'chat' }
+            { id: 'casos', label: 'Gestión de Casos', icon: 'assignment_late' },
+            { id: 'foros', label: 'Foros y Comunidad', icon: 'forum' },
+            { id: 'citas', label: 'Agenda y Citas', icon: 'calendar_month' }
         ],
         Encargado: [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'rendimiento', label: 'Rendimiento Académico', icon: 'auto_stories' },
-            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_today' },
+            { id: 'horarios', label: 'Horario de Clases', icon: 'calendar_today' },
+            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'circulares', label: 'Circulares y Firmas', icon: 'draw' },
-            { id: 'foros', label: 'Foro de Padres', icon: 'groups' },
+            { id: 'foros_padres', label: 'Foro de Padres', icon: 'forum' },
             { id: 'incidentes', label: 'Reportes y Citas', icon: 'campaign' }
         ],
         Estudiante: [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
+            { id: 'cursos', label: 'Mis Cursos', icon: 'class' },
             { id: 'notas', label: 'Mis Calificaciones', icon: 'grade' },
-            { id: 'agenda', label: 'Agenda Académica', icon: 'event_note' },
+            { id: 'horarios', label: 'Horario de Clases', icon: 'calendar_today' },
             { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
-            { id: 'circulares_info', label: 'Circulares Informativas', icon: 'info' },
-            { id: 'asistencia', label: 'Control de Asistencia', icon: 'calendar_today' },
             { id: 'foros', label: 'Mis Foros Académicos', icon: 'forum' }
         ]
     };
@@ -62,7 +63,7 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
     const sidebarStyle = {
         width: isCollapsed ? '80px' : '260px',
         height: '100vh',
-        backgroundColor: '#0D2C54', // Azul Profundo UA
+        backgroundColor: '#124281ff', // Azul Profundo UA
         color: '#FFFFFF',
         position: 'fixed',
         top: 0,
@@ -136,7 +137,7 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
     };
 
     return (
-        <div style={sidebarStyle}>
+        <div className="no-print" style={sidebarStyle}>
             {/* Cabecera: Logotipo y Título Institucional */}
             <div style={headerStyle}>
                 <button

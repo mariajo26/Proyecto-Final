@@ -92,34 +92,11 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
     const isTeacher = userRole === 'Profesor';
 
     return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(13, 44, 84, 0.5)', // Fondo oscuro traslúcido
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-            backdropFilter: 'blur(4px)'
-        }}>
-            <div style={{
-                backgroundColor: 'var(--stitch-surface)',
-                borderRadius: 'var(--stitch-radius-lg)',
-                border: '1px solid var(--stitch-border)',
-                width: '600px',
-                maxWidth: '90%',
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                boxShadow: 'var(--stitch-shadow-lg)',
-                padding: '28px',
-                position: 'relative'
-            }}>
+        <div className="stitch-modal-backdrop">
+            <div className="stitch-modal-content">
                 {/* Cabecera */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--stitch-border)', paddingBottom: '16px' }}>
-                    <h3 style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '700', fontSize: '20px' }}>
+                    <h3 className="stitch-title-font" style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '700', fontSize: '20px' }}>
                         {isTeacher ? 'Programación de Inasistencias Masivas' : 'Justificación de Inasistencias'}
                     </h3>
                     <button 
@@ -141,47 +118,35 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+                                <label className="stitch-label">
                                     Fecha de la Inasistencia:
                                 </label>
                                 <input 
                                     type="date" 
                                     value={fechaFalta}
                                     onChange={(e) => setFechaFalta(e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px 12px',
-                                        borderRadius: '6px',
-                                        border: '1px solid var(--stitch-border)',
-                                        boxSizing: 'border-box'
-                                    }}
+                                    className="stitch-input"
                                     required
                                 />
                             </div>
 
                             {/* Alerta de bloqueo por tiempo excedido */}
                             {isPastDeadline && (
-                                <div style={{
-                                    backgroundColor: '#FEE2E2',
-                                    border: '1px solid var(--stitch-danger)',
-                                    color: 'var(--stitch-danger)',
-                                    padding: '16px',
-                                    borderRadius: '8px',
-                                    fontSize: '13px',
-                                    lineHeight: '1.5'
-                                }}>
-                                    <span style={{ fontWeight: '700', display: 'block', marginBottom: '4px' }}>
-                                        ⚠ Plazo Excedido (Límite Mediodía)
-                                    </span>
-                                    La justificación digital expira a las 12:00 PM del día siguiente a la falta. Debes gestionar la justificación de forma presencial o por llamada con Control Académico.
-                                    <div style={{ marginTop: '8px', fontWeight: 'bold' }}>
-                                        Estado bloqueado: Sin justificación por falta.
+                                <div className="stitch-alert stitch-alert-danger" style={{ margin: 0 }}>
+                                    <div>
+                                        <span style={{ fontWeight: '700', display: 'block', marginBottom: '4px' }}>
+                                            ⚠ Plazo Excedido (Límite Mediodía)
+                                        </span>
+                                        La justificación digital expira a las 12:00 PM del día siguiente a la falta. Debes gestionar la justificación de forma presencial o por llamada con Control Académico.
+                                        <div style={{ marginTop: '8px', fontWeight: 'bold' }}>
+                                            Estado bloqueado: Sin justificación por falta.
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+                                <label className="stitch-label">
                                     Motivo o Justificación Médica/Personal:
                                 </label>
                                 <textarea 
@@ -189,21 +154,14 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                                     value={motivo}
                                     onChange={(e) => setMotivo(e.target.value)}
                                     placeholder="Detalla de forma explícita el motivo de la falta del alumno..."
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px 12px',
-                                        borderRadius: '6px',
-                                        border: '1px solid var(--stitch-border)',
-                                        boxSizing: 'border-box',
-                                        fontFamily: 'inherit'
-                                    }}
+                                    className="stitch-textarea"
                                     disabled={isPastDeadline}
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+                                <label className="stitch-label">
                                     URL de Documento de Soporte (Receta, Constancia):
                                 </label>
                                 <input 
@@ -211,32 +169,19 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                                     value={documentoUrl}
                                     onChange={(e) => setDocumentoUrl(e.target.value)}
                                     placeholder="http://ejemplo.com/constancia.pdf"
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px 12px',
-                                        borderRadius: '6px',
-                                        border: '1px solid var(--stitch-border)',
-                                        boxSizing: 'border-box'
-                                    }}
+                                    className="stitch-input"
                                     disabled={isPastDeadline}
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>
+                                <label className="stitch-label">
                                     Enviar solicitud a:
                                 </label>
                                 <select 
                                     value={destino}
                                     onChange={(e) => setDestino(e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px 12px',
-                                        borderRadius: '6px',
-                                        border: '1px solid var(--stitch-border)',
-                                        boxSizing: 'border-box',
-                                        backgroundColor: '#FFFFFF'
-                                    }}
+                                    className="stitch-select"
                                     disabled={isPastDeadline}
                                 >
                                     <option value="Profesor Guia">Profesor Guía de Grado</option>
@@ -249,8 +194,7 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                             <button 
                                 type="button" 
                                 onClick={onClose}
-                                className="stitch-button"
-                                style={{ backgroundColor: 'transparent', border: '1px solid var(--stitch-border)', color: 'var(--stitch-text-primary)' }}
+                                className="stitch-button-secondary"
                             >
                                 Cancelar
                             </button>
@@ -276,32 +220,32 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Fecha Inicio:</label>
+                                    <label className="stitch-label">Fecha Inicio:</label>
                                     <input 
                                         type="date" 
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
-                                        style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid var(--stitch-border)', boxSizing: 'border-box' }}
+                                        className="stitch-input"
                                         required
                                     />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Fecha Fin:</label>
+                                    <label className="stitch-label">Fecha Fin:</label>
                                     <input 
                                         type="date" 
                                         value={endDate}
                                         onChange={(e) => setEndDate(e.target.value)}
-                                        style={{ width: '100%', padding: '10px 12px', borderRadius: '6px', border: '1px solid var(--stitch-border)', boxSizing: 'border-box' }}
+                                        className="stitch-input"
                                         required
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Materias/Cursos a Afectar:</label>
+                                <label className="stitch-label">Materias/Cursos a Afectar:</label>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', border: '1px solid var(--stitch-border)', padding: '12px', borderRadius: '6px', backgroundColor: '#FFFFFF' }}>
                                     {bulkCourses.map((c, index) => (
-                                        <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer' }}>
+                                        <label key={c.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer', color: 'var(--stitch-text-primary)', fontWeight: '500' }}>
                                             <input 
                                                 type="checkbox" 
                                                 checked={c.selected}
@@ -310,6 +254,7 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                                                         idx === index ? { ...item, selected: !item.selected } : item
                                                     ));
                                                 }}
+                                                style={{ width: '18px', height: '18px', cursor: 'pointer' }}
                                             />
                                             {c.name}
                                         </label>
@@ -318,20 +263,13 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px' }}>Observación Académica o Motivo:</label>
+                                <label className="stitch-label">Observación Académica o Motivo:</label>
                                 <textarea 
                                     rows="3"
                                     value={profObservation}
                                     onChange={(e) => setProfObservation(e.target.value)}
                                     placeholder="Escribe la causa o justificación del bloqueo (ej: Licencia médica de 5 días emitida por el IGSS)..."
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px 12px',
-                                        borderRadius: '6px',
-                                        border: '1px solid var(--stitch-border)',
-                                        boxSizing: 'border-box',
-                                        fontFamily: 'inherit'
-                                    }}
+                                    className="stitch-textarea"
                                     required
                                 />
                             </div>
@@ -341,8 +279,7 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
                             <button 
                                 type="button" 
                                 onClick={onClose}
-                                className="stitch-button"
-                                style={{ backgroundColor: 'transparent', border: '1px solid var(--stitch-border)', color: 'var(--stitch-text-primary)' }}
+                                className="stitch-button-secondary"
                             >
                                 Cancelar
                             </button>
@@ -356,3 +293,4 @@ export default function AttendanceModal({ onClose, userRole, studentId, studentN
         </div>
     );
 }
+

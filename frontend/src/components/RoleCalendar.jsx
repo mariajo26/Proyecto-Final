@@ -152,16 +152,7 @@ export default function RoleCalendar({ userRole }) {
                             : 'Vista de Encargado: Priorización de salud académica con alertas visuales de tareas pendientes.'}
                     </p>
                 </div>
-                <span style={{
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    backgroundColor: userRole === 'Estudiante' ? 'var(--stitch-secondary)' : 'var(--stitch-danger)',
-                    color: '#FFFFFF',
-                    padding: '6px 12px',
-                    borderRadius: '20px'
-                }}>
-                    Rol: {userRole}
-                </span>
+
             </div>
 
             {/* Leyenda de Colores */}

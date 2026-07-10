@@ -91,15 +91,14 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
     const isTeacher = userRole === 'Profesor';
 
     return (
-        <div style={{ backgroundColor: 'var(--stitch-surface)', borderRadius: 'var(--stitch-radius-md)', border: '1px solid var(--stitch-border)', padding: '24px', boxShadow: 'var(--stitch-shadow-md)' }}>
+        <div className="stitch-card" style={{ padding: '24px', backgroundColor: '#FFFFFF' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--stitch-border)', paddingBottom: '16px' }}>
-                <h2 style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '700' }}>
+                <h2 className="stitch-title-font" style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '700', fontSize: '20px' }}>
                     Detalle del Curso - Código #{courseId}
                 </h2>
                 <button 
                     onClick={onClose}
-                    className="stitch-button"
-                    style={{ backgroundColor: 'transparent', border: '1px solid var(--stitch-border)', color: 'var(--stitch-text-primary)' }}
+                    className="stitch-button-secondary"
                 >
                     Cerrar Detalle
                 </button>
@@ -113,38 +112,38 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                     
                     {/* Sección: Banco de Rúbricas */}
                     <div>
-                        <h3 style={{ color: 'var(--stitch-primary)', borderBottom: '2px solid var(--stitch-secondary)', paddingBottom: '8px', marginBottom: '16px' }}>
+                        <h3 className="stitch-title-font" style={{ color: 'var(--stitch-primary)', borderBottom: '2px solid var(--stitch-secondary)', paddingBottom: '8px', marginBottom: '16px', fontSize: '16px', fontWeight: '800' }}>
                             Gestión del Banco de Rúbricas
                         </h3>
                         
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px', alignItems: 'start' }}>
                             <div style={{ overflowX: 'auto' }}>
-                                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+                                <table className="stitch-table">
                                     <thead>
-                                        <tr style={{ borderBottom: '2px solid var(--stitch-border)' }}>
-                                            <th style={{ padding: '12px' }}>Criterio</th>
-                                            <th style={{ padding: '12px' }}>Peso (%)</th>
-                                            <th style={{ padding: '12px' }}>Excelente</th>
-                                            <th style={{ padding: '12px' }}>Bien</th>
-                                            <th style={{ padding: '12px' }}>Deficiente</th>
+                                        <tr>
+                                            <th className="stitch-th">Criterio</th>
+                                            <th className="stitch-th">Peso (%)</th>
+                                            <th className="stitch-th">Excelente</th>
+                                            <th className="stitch-th">Bien</th>
+                                            <th className="stitch-th">Deficiente</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {rubrics.map((r) => (
-                                            <tr key={r.id} style={{ borderBottom: '1px solid var(--stitch-border)' }}>
-                                                <td style={{ padding: '12px', fontWeight: '500' }}>{r.criterion}</td>
-                                                <td style={{ padding: '12px', color: 'var(--stitch-secondary)', fontWeight: '600' }}>{r.weight}%</td>
-                                                <td style={{ padding: '12px', color: 'var(--stitch-text-secondary)' }}>{r.excellent}</td>
-                                                <td style={{ padding: '12px', color: 'var(--stitch-text-secondary)' }}>{r.good}</td>
-                                                <td style={{ padding: '12px', color: 'var(--stitch-text-secondary)' }}>{r.poor}</td>
+                                            <tr key={r.id} className="stitch-tr-hover">
+                                                <td className="stitch-td" style={{ fontWeight: '700' }}>{r.criterion}</td>
+                                                <td className="stitch-td" style={{ color: 'var(--stitch-secondary)', fontWeight: '800' }}>{r.weight}%</td>
+                                                <td className="stitch-td" style={{ color: 'var(--stitch-text-secondary)', fontSize: '13px' }}>{r.excellent}</td>
+                                                <td className="stitch-td" style={{ color: 'var(--stitch-text-secondary)', fontSize: '13px' }}>{r.good}</td>
+                                                <td className="stitch-td" style={{ color: 'var(--stitch-text-secondary)', fontSize: '13px' }}>{r.poor}</td>
                                             </tr>
                                         ))}
                                         <tr style={{ backgroundColor: 'var(--stitch-background)', fontWeight: '700' }}>
-                                            <td style={{ padding: '12px' }}>Total Ponderación Acumulada</td>
-                                            <td style={{ padding: '12px', color: totalRubricWeight === 100 ? 'var(--stitch-success)' : 'var(--stitch-danger)' }}>
+                                            <td className="stitch-td" style={{ fontWeight: '800' }}>Total Ponderación Acumulada</td>
+                                            <td className="stitch-td" style={{ color: totalRubricWeight === 100 ? 'var(--stitch-success)' : 'var(--stitch-danger)', fontWeight: '800' }}>
                                                 {totalRubricWeight}%
                                             </td>
-                                            <td colSpan="3" style={{ padding: '12px', fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>
+                                            <td colSpan="3" className="stitch-td" style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)' }}>
                                                 {totalRubricWeight === 100 ? '✓ Rúbrica completa y lista.' : '⚠ La suma total debe ser exactamente 100%.'}
                                             </td>
                                         </tr>
@@ -153,27 +152,27 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                             </div>
 
                             {/* Formulario para agregar criterios */}
-                            <form onSubmit={handleAddCriterion} style={{ backgroundColor: 'var(--stitch-background)', padding: '20px', borderRadius: 'var(--stitch-radius-sm)', border: '1px solid var(--stitch-border)' }}>
-                                <h4 style={{ margin: '0 0 16px 0', color: 'var(--stitch-primary)' }}>Añadir Criterio de Rúbrica</h4>
+                            <form onSubmit={handleAddCriterion} className="stitch-card" style={{ padding: '20px', backgroundColor: '#F8FAFC' }}>
+                                <h4 className="stitch-title-font" style={{ margin: '0 0 16px 0', color: 'var(--stitch-primary)', fontSize: '14px', fontWeight: '800' }}>Añadir Criterio de Rúbrica</h4>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '4px' }}>Criterio:</label>
+                                        <label className="stitch-label">Criterio:</label>
                                         <input 
                                             type="text" 
                                             value={newCriterion} 
                                             onChange={(e) => setNewCriterion(e.target.value)}
                                             placeholder="Ej. Análisis Crítico"
-                                            style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--stitch-border)', boxSizing: 'border-box' }}
+                                            className="stitch-input"
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '4px' }}>Peso (%):</label>
+                                        <label className="stitch-label">Peso (%):</label>
                                         <input 
                                             type="number" 
                                             value={newWeight || ''} 
                                             onChange={(e) => setNewWeight(Number(e.target.value))}
                                             placeholder="Ponderación (0-100)"
-                                            style={{ width: '100%', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--stitch-border)', boxSizing: 'border-box' }}
+                                            className="stitch-input"
                                         />
                                     </div>
                                 </div>
@@ -186,43 +185,44 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
 
                     {/* Sección: Entregas pendientes de calificación */}
                     <div>
-                        <h3 style={{ color: 'var(--stitch-primary)', borderBottom: '2px solid var(--stitch-secondary)', paddingBottom: '8px', marginBottom: '16px' }}>
+                        <h3 className="stitch-title-font" style={{ color: 'var(--stitch-primary)', borderBottom: '2px solid var(--stitch-secondary)', paddingBottom: '8px', marginBottom: '16px', fontSize: '16px', fontWeight: '800' }}>
                             Tareas Enviadas por Estudiantes
                         </h3>
 
                         {gradingSubmission && (
-                            <form onSubmit={handleGradeSubmission} style={{ backgroundColor: '#EFF6FF', border: '1px solid var(--stitch-secondary)', padding: '16px', borderRadius: '8px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                                <span>Calificando a <strong>{gradingSubmission.studentName}</strong> en <em>{gradingSubmission.taskTitle}</em>:</span>
+                            <form onSubmit={handleGradeSubmission} className="stitch-alert stitch-alert-success" style={{ margin: '0 0 20px 0', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+                                <span style={{ color: 'inherit' }}>Calificando a <strong>{gradingSubmission.studentName}</strong> en <em>{gradingSubmission.taskTitle}</em>:</span>
                                 <input 
                                     type="number" 
                                     step="0.1" 
                                     value={tempGrade} 
                                     onChange={(e) => setTempGrade(e.target.value)}
                                     placeholder="Nota (0.0 a 10.0)"
-                                    style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--stitch-border)', width: '150px' }}
+                                    className="stitch-input"
+                                    style={{ width: '150px' }}
                                 />
                                 <button type="submit" className="stitch-button">Asignar Nota</button>
-                                <button type="button" onClick={() => setGradingSubmission(null)} style={{ background: 'none', border: 'none', color: 'var(--stitch-danger)', cursor: 'pointer', fontWeight: '500' }}>Cancelar</button>
+                                <button type="button" onClick={() => setGradingSubmission(null)} style={{ background: 'none', border: 'none', color: 'var(--stitch-danger)', cursor: 'pointer', fontWeight: '700' }}>Cancelar</button>
                             </form>
                         )}
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {studentSubmissions.map((sub) => (
-                                <div key={sub.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', border: '1px solid var(--stitch-border)', borderRadius: '8px', backgroundColor: '#FFFFFF' }}>
+                                <div key={sub.id} className="stitch-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', backgroundColor: '#FFFFFF' }}>
                                     <div>
-                                        <h4 style={{ margin: '0 0 4px 0', color: 'var(--stitch-primary)' }}>{sub.studentName}</h4>
+                                        <h4 className="stitch-title-font" style={{ margin: '0 0 4px 0', color: 'var(--stitch-primary)', fontSize: '14px', fontWeight: '800' }}>{sub.studentName}</h4>
                                         <p style={{ margin: 0, fontSize: '13px', color: 'var(--stitch-text-secondary)' }}>
                                             Tarea: <strong>{sub.taskTitle}</strong> | Recibida el: {sub.submittedAt}
                                         </p>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                         {sub.status === 'Calificada' ? (
-                                            <span style={{ fontSize: '14px', fontWeight: '700', color: 'var(--stitch-success)' }}>
+                                            <span className="stitch-badge stitch-badge-success" style={{ fontSize: '13px', padding: '4px 12px' }}>
                                                 Nota: {sub.grade}/10.0
                                             </span>
                                         ) : (
                                             <>
-                                                <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--stitch-warning)', backgroundColor: '#FEF3C7', padding: '4px 8px', borderRadius: '12px' }}>
+                                                <span className="stitch-badge stitch-badge-warning">
                                                     Pendiente
                                                 </span>
                                                 <button 
@@ -245,25 +245,17 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                 // PANEL DE TAREAS (VISTA ESPEJO ALUMNO/ENCARGADO)
                 // ------------------------------------------------------------
                 <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <h3 style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '600' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                        <h3 className="stitch-title-font" style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '800', fontSize: '16px' }}>
                             Asignaciones Académicas
                         </h3>
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <div className="stitch-tabs-container" style={{ marginBottom: 0, border: 'none' }}>
                             {['Todas', 'Proxima', 'Calificadas', 'Pendiente de Calificar', 'Retrasadas/Intolerables'].map((type) => (
                                 <button
                                     key={type}
                                     onClick={() => setFilterType(type)}
-                                    style={{
-                                        padding: '6px 12px',
-                                        fontSize: '12px',
-                                        borderRadius: '20px',
-                                        border: filterType === type ? '1px solid var(--stitch-primary)' : '1px solid var(--stitch-border)',
-                                        backgroundColor: filterType === type ? 'var(--stitch-primary)' : '#FFFFFF',
-                                        color: filterType === type ? '#FFFFFF' : 'var(--stitch-text-secondary)',
-                                        cursor: 'pointer',
-                                        fontWeight: '500'
-                                    }}
+                                    className={`stitch-tab-btn ${filterType === type ? 'stitch-tab-btn-active' : ''}`}
+                                    style={{ padding: '6px 12px', fontSize: '12px' }}
                                 >
                                     {type}
                                 </button>
@@ -277,11 +269,10 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                             .map((a) => (
                                 <div 
                                     key={a.id} 
+                                    className="stitch-card"
                                     style={{ 
                                         padding: '20px', 
-                                        borderRadius: 'var(--stitch-radius-md)', 
                                         backgroundColor: '#FFFFFF', 
-                                        border: `1px solid var(--stitch-border)`, 
                                         borderLeft: `5px solid ${a.colorCode}`,
                                         display: 'flex',
                                         justifyContent: 'space-between',
@@ -289,7 +280,7 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                                     }}
                                 >
                                     <div>
-                                        <h4 style={{ margin: '0 0 6px 0', fontSize: '16px', color: 'var(--stitch-primary)' }}>{a.title}</h4>
+                                        <h4 className="stitch-title-font" style={{ margin: '0 0 6px 0', fontSize: '15px', color: 'var(--stitch-primary)', fontWeight: '800' }}>{a.title}</h4>
                                         <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: 'var(--stitch-text-secondary)' }}>
                                             <span>Ponderación: <strong>{a.weight} Pts</strong></span>
                                             <span>Límite: {a.limitDate}</span>
@@ -297,18 +288,15 @@ export default function CourseDetail({ courseId, userRole, onClose }) {
                                     </div>
                                     <div style={{ textAlign: 'right' }}>
                                         {a.status === 'Calificada' ? (
-                                            <span style={{ fontSize: '18px', fontWeight: '700', color: 'var(--stitch-success)' }}>
+                                            <span className="stitch-badge stitch-badge-success" style={{ fontSize: '14px', padding: '6px 14px' }}>
                                                 {a.grade} Pts
                                             </span>
                                         ) : (
-                                            <span style={{ 
-                                                fontSize: '12px', 
-                                                fontWeight: '700', 
-                                                color: '#FFFFFF', 
-                                                backgroundColor: a.colorCode,
-                                                padding: '4px 10px',
-                                                borderRadius: '20px'
-                                            }}>
+                                            <span className={`stitch-badge ${
+                                                a.status.includes('Retrasada') 
+                                                    ? 'stitch-badge-warning' 
+                                                    : (a.status.includes('Intolerable') ? 'stitch-badge-danger' : 'stitch-badge-neutral')
+                                            }`} style={{ fontSize: '12px', padding: '4px 10px' }}>
                                                 {a.status}
                                             </span>
                                         )}
