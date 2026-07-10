@@ -27,6 +27,8 @@ import AsistenciaGeneralControl from './components/control/AsistenciaGeneralCont
 import CircularesControl from './components/control/CircularesControl';
 import IncidentesControl from './components/control/IncidentesControl';
 import ForosControl from './components/control/ForosControl';
+import GestionUsuarios from './components/control/GestionUsuarios';
+import GestionCursos from './components/control/GestionCursos';
 import DashboardEstudiante from './components/estudiante/DashboardEstudiante';
 import MisCursosEstudiante from './components/estudiante/MisCursosEstudiante';
 import MisCalificacionesEstudiante from './components/estudiante/MisCalificacionesEstudiante';
@@ -251,20 +253,56 @@ export default function App() {
   };
 
   const renderInicioDashboard = () => {
-    if (usuario.rol === 'Administrador') return <VistaAdminParametros />;
-    if (usuario.rol === 'Control Academico') {
-      return (
-        <div style={{ backgroundColor: '#FFFFFF', padding: '24px', borderRadius: '8px', border: '1px solid var(--stitch-border)' }}>
-          <h2 style={{ color: 'var(--stitch-primary)', fontWeight: '600', marginBottom: '16px' }}>Panel de Control Académico</h2>
-          <p style={{ color: 'var(--stitch-text-secondary)' }}>
-            Bienvenido al módulo de control y secretaría escolar. Utiliza el menú lateral para gestionar la asistencia general, alumnos y circulares.
+    const getDashboardInfo = () => {
+      switch (usuario.rol) {
+        case 'Administrador':
+          return {
+            subtitulo: 'Panel de Control General',
+            descripcion: 'Bienvenido al módulo de administración y control general de la plataforma. Utiliza el menú lateral para gestionar las configuraciones del sistema.'
+          };
+        case 'Control Academico':
+          return {
+            subtitulo: 'Panel de Control Académico',
+            descripcion: 'Bienvenido al módulo de control y secretaría escolar. Utiliza el menú lateral para gestionar la asistencia general, alumnos y circulares.'
+          };
+        case 'Profesor':
+          return {
+            subtitulo: 'Panel de Control de Profesores',
+            descripcion: 'Bienvenido al portal docente. Utiliza el menú lateral para gestionar tus cursos, calificaciones, planificación de actividades y citas.'
+          };
+        case 'Estudiante':
+          return {
+            subtitulo: 'Panel del Estudiante',
+            descripcion: 'Bienvenido a tu portal de estudiante. Utiliza el menú lateral para consultar tus cursos, calificaciones, foros académicos y agenda escolar.'
+          };
+        default:
+          return {
+            subtitulo: 'Panel de Tutor / Encargado',
+            descripcion: 'Bienvenido al portal de padres y encargados. Utiliza el menú lateral para visualizar el rendimiento de tus tutorados, firmar circulares y gestionar citas.'
+          };
+      }
+    };
+
+    const info = getDashboardInfo();
+
+    return (
+      <div className="stitch-card" style={{ padding: '32px', backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', gap: '16px', borderRadius: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span className="material-icons-outlined" style={{ color: 'var(--stitch-primary)', fontSize: '24px' }}>home</span>
+          <h4 className="stitch-title-font" style={{ margin: 0, color: 'var(--stitch-primary)', fontWeight: '800', fontSize: '18px' }}>
+            Inicio
+          </h4>
+        </div>
+        <div style={{ borderTop: '1px solid var(--stitch-border)', paddingTop: '16px' }}>
+          <h5 className="stitch-title-font" style={{ margin: '0 0 8px 0', color: 'var(--stitch-primary)', fontWeight: '700', fontSize: '15px' }}>
+            {info.subtitulo}
+          </h5>
+          <p style={{ color: 'var(--stitch-text-secondary)', margin: 0, fontSize: '13.5px', lineHeight: '1.6' }}>
+            {info.descripcion}
           </p>
         </div>
-      );
-    }
-    if (usuario.rol === 'Profesor') return <MisCursos />;
-    if (usuario.rol === 'Estudiante') return <DashboardEstudiante />;
-    return <VistaHorarioClasesEstudiante />;
+      </div>
+    );
   };
 
   return (
@@ -279,7 +317,8 @@ export default function App() {
     >
         <Routes>
         <Route path="/" element={renderInicioDashboard()} />
-        <Route path="/cursos" element={usuario.rol === 'Profesor' ? <MisCursos /> : (usuario.rol === 'Estudiante' ? <MisCursosEstudiante /> : <VistaCreandoEspacio />)} />
+        <Route path="/cursos" element={usuario.rol === 'Profesor' ? <MisCursos /> : (usuario.rol === 'Estudiante' ? <MisCursosEstudiante /> : ((usuario.rol === 'Administrador' || usuario.rol === 'Control Academico') ? <GestionCursos /> : <VistaCreandoEspacio />))} />
+        <Route path="/usuarios" element={(usuario.rol === 'Administrador' || usuario.rol === 'Control Academico') ? <GestionUsuarios /> : <VistaCreandoEspacio />} />
         <Route path="/cursos/tareas" element={usuario.rol === 'Profesor' ? <GestionTareas /> : <VistaCreandoEspacio />} />
         <Route path="/actividades" element={usuario.rol === 'Profesor' ? <PlanificacionActividades /> : <VistaCreandoEspacio />} />
         <Route path="/cursos/notas" element={usuario.rol === 'Profesor' ? <LibretaNotasCurso /> : <VistaCreandoEspacio />} />

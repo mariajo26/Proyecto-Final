@@ -106,11 +106,11 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
     // 💾 ESTADO Y DATOS DE PRUEBA (MOCK DATA)
     // ────────────────────────────────────────────────────────────────────────
 
-    // Listado inicial de contactos
+    // Listado inicial de contactos reales del sistema
     const [contactos, setContactos] = useState([
         {
             id: 1,
-            nombre: 'Carlos Eduardo Méndez',
+            nombre: 'Jose Ortega Cruz',
             codigo_ua: 'UA-26501',
             rol: 'Estudiante',
             avatarColor: '#3B82F6', // Azul
@@ -122,7 +122,7 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
         },
         {
             id: 2,
-            nombre: 'María José Flores',
+            nombre: 'Andrea Mendez Silva',
             codigo_ua: 'UA-26502',
             rol: 'Estudiante',
             avatarColor: '#10B981', // Verde
@@ -134,9 +134,9 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
         },
         {
             id: 3,
-            nombre: 'Sofia Isabel Castro',
-            codigo_ua: 'UA-26505',
-            rol: 'Estudiante',
+            nombre: 'Carlos Gomez Estrada',
+            codigo_ua: 'UA-26301',
+            rol: 'Profesor Guía',
             avatarColor: '#F59E0B', // Naranja/Amarillo
             ultimoMensaje: 'Cargando último mensaje...',
             horaUltimo: '',
@@ -146,9 +146,9 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
         },
         {
             id: 4,
-            nombre: 'Diego Alejandro Ortiz',
-            codigo_ua: 'UA-26508',
-            rol: 'Estudiante',
+            nombre: 'Sofia Lopez Alvarado',
+            codigo_ua: 'UA-26302',
+            rol: 'Profesor de Materia',
             avatarColor: '#EC4899', // Rosa
             ultimoMensaje: 'Cargando último mensaje...',
             horaUltimo: '',
@@ -158,9 +158,9 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
         },
         {
             id: 5,
-            nombre: 'Profesor Javier Pérez',
-            codigo_ua: 'UA-10022',
-            rol: 'Docente Colaborador',
+            nombre: 'Luisa Ortega Cruz',
+            codigo_ua: 'UA-26401',
+            rol: 'Padre de Familia',
             avatarColor: '#8B5CF6', // Violeta
             ultimoMensaje: 'Cargando último mensaje...',
             horaUltimo: '',
@@ -213,9 +213,106 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
     // Establecer primer contacto activo por defecto si no hay ninguno
     useEffect(() => {
         if (contactos.length > 0 && !contactoSeleccionado) {
-            setContactoSeleccionado(contactos[0]);
+            const firstValid = contactos.find(c => c.codigo_ua !== usuario?.codigo_ua);
+            if (firstValid) {
+                setContactoSeleccionado(firstValid);
+            }
         }
-    }, [contactos, contactoSeleccionado]);
+    }, [contactos, contactoSeleccionado, usuario?.codigo_ua]);
+
+    // Cargar notificaciones reales desde el backend
+    useEffect(() => {
+        if (!token) return;
+
+        fetch('/api/comunicacion/notifications', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                const mappedNotifs = data.map(n => {
+                    let tipoVal = 'neutro';
+                    if (n.tipo === 'Alerta') tipoVal = 'alerta';
+                    else if (n.modulo_origen === 'Citas') tipoVal = 'info';
+                    else if (n.modulo_origen === 'Asistencia') tipoVal = 'exito';
+
+                    let iconoVal = 'notifications';
+                    if (n.modulo_origen === 'Asistencia') iconoVal = 'check_circle';
+                    else if (n.modulo_origen === 'Calificaciones') iconoVal = 'grade';
+                    else if (n.modulo_origen === 'Circulares') iconoVal = 'draw';
+                    else if (n.modulo_origen === 'Foros') iconoVal = 'forum';
+                    else if (n.modulo_origen === 'Citas') iconoVal = 'campaign';
+                    else if (n.modulo_origen === 'Quejas') iconoVal = 'assignment_late';
+
+                    const fechaFormato = new Date(n.fecha_creacion).toLocaleDateString() + ' ' + 
+                                         new Date(n.fecha_creacion).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    return {
+                        id: n._id,
+                        titulo: n.titulo,
+                        mensaje: n.mensaje,
+                        fecha: fechaFormato,
+                        tipo: tipoVal,
+                        leido: n.leido,
+                        icono: iconoVal
+                    };
+                });
+                setNotificaciones(mappedNotifs);
+            }
+        })
+        .catch(err => console.error('Error al cargar notificaciones reales:', err));
+    }, [token]);
+
+    // Cargar conversaciones y contactos con historial reciente desde el backend
+    useEffect(() => {
+        if (!token || !usuario?.codigo_ua) return;
+
+        fetch('/api/comunicacion/messages', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                const uniqueInterlocutors = {};
+                
+                data.forEach(m => {
+                    const interlocutorCode = m.emisor_id === usuario?.codigo_ua ? m.receptor_id : m.emisor_id;
+                    if (!uniqueInterlocutors[interlocutorCode]) {
+                        uniqueInterlocutors[interlocutorCode] = {
+                            id: m.id,
+                            nombre: m.emisor_nombre || interlocutorCode,
+                            codigo_ua: interlocutorCode,
+                            rol: interlocutorCode.startsWith('UA-10') || interlocutorCode.startsWith('UA-263') ? 'Docente / Staff' : 'Estudiante / Tutor',
+                            avatarColor: '#3B82F6',
+                            ultimoMensaje: m.contenido,
+                            horaUltimo: new Date(m.fecha_envio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                            noLeidos: 0,
+                            enLinea: false,
+                            historial: []
+                        };
+                    }
+                });
+
+                const loadedContacts = Object.values(uniqueInterlocutors);
+                if (loadedContacts.length > 0) {
+                    setContactos(prev => {
+                        const merged = [...loadedContacts];
+                        prev.forEach(p => {
+                            if (!merged.some(m => m.codigo_ua === p.codigo_ua)) {
+                                merged.push(p);
+                            }
+                        });
+                        return merged;
+                    });
+                }
+            }
+        })
+        .catch(err => console.error('Error al obtener bandeja de entrada de mensajes:', err));
+    }, [token, usuario?.codigo_ua]);
 
     // ────────────────────────────────────────────────────────────────────────
     // 🔄 LÓGICA DE INTERACCIÓN (CHATS)
@@ -317,35 +414,28 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
             return n;
         }));
 
-        // 🌐 PETICIÓN HTTP (PUT FETCH / AXIOS):
-        // Para actualizar el estado leído en la base de datos:
-        // ---------------------------------------------------------------------------------
-        // fetch(`/api/comunicacion/notifications/${id}/read`, {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`
-        //     }
-        // })
-        // .then(res => res.json())
-        // .catch(err => console.error('Error al marcar notificacion leida en backend:', err));
-        // ---------------------------------------------------------------------------------
+        fetch(`/api/comunicacion/notifications/${id}/read`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .catch(err => console.error('Error al marcar notificacion leida en backend:', err));
     };
 
     // Marcar todas las notificaciones como leídas
     const handleMarcarTodasLeidas = () => {
         setNotificaciones(prev => prev.map(n => ({ ...n, leido: true })));
 
-        // 🌐 PETICIÓN HTTP (PUT FETCH / AXIOS) MASIVO:
-        // ---------------------------------------------------------------------------------
-        // fetch('/api/comunicacion/notifications/read-all', {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`
-        //     }
-        // })
-        // .then(res => res.json())
-        // .catch(err => console.error('Error al marcar todas las notificaciones como leidas:', err));
-        // ---------------------------------------------------------------------------------
+        fetch('/api/comunicacion/notifications/read-all', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .catch(err => console.error('Error al marcar todas las notificaciones como leidas:', err));
     };
 
     // Contadores rápidos para los badges en las pestañas
@@ -398,7 +488,7 @@ export default function Comunicaciones({ defaultTab = 'chats' }) {
                         </h4>
                         
                         <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }} className="no-print">
-                            {contactos.map(c => {
+                            {contactos.filter(c => c.codigo_ua !== usuario?.codigo_ua).map(c => {
                                 const isSelected = contactoSeleccionado?.id === c.id;
                                 return (
                                     <div

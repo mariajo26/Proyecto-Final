@@ -18,19 +18,20 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
         ],
         'Control Academico': [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
+            { id: 'usuarios', label: 'Gestión de Usuarios', icon: 'people' },
+            { id: 'cursos', label: 'Cursos y Materias', icon: 'school' },
             { id: 'alumnos', label: 'Alumnos y Familias', icon: 'groups' },
             { id: 'horarios', label: 'Personal y Horarios', icon: 'badge' },
-            { id: 'asistencia_gral', label: 'Asistencia General', icon: 'done_all' },
             { id: 'circulares', label: 'Circulares y Firmas', icon: 'assignment' },
             { id: 'quejas', label: 'Atención de Incidentes', icon: 'assignment_late' },
-            { id: 'foros_control', label: 'Foro Institucional', icon: 'forum' }
+            { id: 'foros_control', label: 'Ajustes de Foros', icon: 'forum' }
         ],
         Profesor: [
             { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'cursos', label: 'Mis Cursos', icon: 'class' },
             { id: 'mis_estudiantes', label: 'Mis Estudiantes', icon: 'groups' },
             { id: 'horarios', label: 'Horarios de Curso', icon: 'calendar_today' },
-            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
+            // { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'rubricas', label: 'Banco de Rúbricas', icon: 'assessment' },
             { id: 'actividades', label: 'Planificación Actividades', icon: 'event_note' },
             { id: 'notas', label: 'Centro Calificaciones', icon: 'grade' },
@@ -42,7 +43,7 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
             { id: 'inicio', label: 'Inicio', icon: 'home' },
             { id: 'rendimiento', label: 'Rendimiento Académico', icon: 'auto_stories' },
             { id: 'horarios', label: 'Horario de Clases', icon: 'calendar_today' },
-            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
+            // { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'circulares', label: 'Circulares y Firmas', icon: 'draw' },
             { id: 'foros_padres', label: 'Foro de Padres', icon: 'forum' },
             { id: 'incidentes', label: 'Reportes y Citas', icon: 'campaign' }
@@ -52,7 +53,7 @@ export default function Sidebar({ userRole, onLogout, activeTab, setActiveTab, i
             { id: 'cursos', label: 'Mis Cursos', icon: 'class' },
             { id: 'notas', label: 'Mis Calificaciones', icon: 'grade' },
             { id: 'horarios', label: 'Horario de Clases', icon: 'calendar_today' },
-            { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
+            // { id: 'calendario', label: 'Calendario Escolar', icon: 'calendar_month' },
             { id: 'foros', label: 'Mis Foros Académicos', icon: 'forum' }
         ]
     };

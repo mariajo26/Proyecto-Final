@@ -72,66 +72,85 @@ export default function ControlProfesores() {
         }
     };
 
-    // Helper para buscar clase en matriz
-    const getClaseEnPeriodo = (dia, horaInicio) => {
-        if (!horarioData) return null;
-        // Normalizar comparación de hora
-        return horarioData.clases.find(c => {
-            const matchingDia = c.dia_semana.toLowerCase() === dia.toLowerCase();
-            const matchingHora = c.hora_inicio.substring(0, 5) === horaInicio.substring(0, 5);
-            return matchingDia && matchingHora;
-        });
-    };
-
-    // Helper para buscar horario de atención
-    const getAtencionEnPeriodo = (dia, horaInicio) => {
-        if (!horarioData) return null;
-        return horarioData.horarios_atencion.find(a => {
-            const matchingDia = a.dia_semana.toLowerCase() === dia.toLowerCase();
-            const matchingHora = a.hora_inicio.substring(0, 5) === horaInicio.substring(0, 5);
-            return matchingDia && matchingHora;
-        });
-    };
-
     return (
-        <div style={{ padding: '0px', background: 'var(--stitch-background)', fontFamily: 'var(--stitch-font-family, Google Sans, sans-serif)' }}>
+        <div style={{ fontFamily: 'var(--stitch-font)', padding: '4px' }}>
             
+            {/* ── CABECERA PREMIUM STITCH UI ── */}
+            <div style={{
+                background: 'linear-gradient(135deg, var(--stitch-primary) 0%, #1e40af 100%)',
+                color: '#FFFFFF',
+                padding: '24px 32px',
+                borderRadius: 'var(--stitch-radius-md)',
+                marginBottom: '28px',
+                boxShadow: 'var(--stitch-shadow-lg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '16px',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                <div style={{ position: 'absolute', right: '-20px', bottom: '-45px', fontSize: '180px', color: 'rgba(255,255,255,0.04)', fontFamily: 'Material Icons Outlined', userSelect: 'none', pointerEvents: 'none' }}>
+                    badge
+                </div>
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                    <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.5px', color: '#93C5FD', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span className="material-icons-outlined" style={{ fontSize: '14px' }}>contact_page</span>
+                        Control de Personal y Horarios
+                    </span>
+                    <h2 style={{ color: '#FFFFFF', fontWeight: '800', margin: '4px 0 0 0', fontSize: '24px', fontFamily: 'Outfit, sans-serif' }}>
+                        Horarios y Fichas de Profesores
+                    </h2>
+                    <p style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: '13px', margin: '4px 0 0 0' }}>
+                        Monitorea la carga de clases, horarios de atención y datos laborales del personal docente.
+                    </p>
+                </div>
+            </div>
+
+            {/* ── CONTENIDO PRINCIPAL ── */}
             {loading ? (
-                <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
                     <span className="material-icons-outlined" style={{ fontSize: '40px', color: 'var(--stitch-primary)', animation: 'spin 1s linear infinite' }}>sync</span>
-                    <p style={{ color: 'var(--stitch-on-surface-variant)', marginTop: '10px' }}>Cargando personal docente...</p>
+                    <p style={{ color: 'var(--stitch-text-secondary)', marginTop: '12px' }}>Cargando personal docente de la institución...</p>
                 </div>
             ) : error ? (
-                <div style={{ padding: '16px', background: 'var(--stitch-error-container)', color: 'var(--stitch-error)', borderRadius: '10px' }}>
-                    {error}
+                <div className="stitch-alert stitch-alert-danger" style={{ marginBottom: '24px' }}>
+                    <span className="material-icons-outlined">error_outline</span>
+                    <span>{error}</span>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
                     {profesores.map(prof => (
-                        <div key={prof.id} className="st-card" style={{ borderRadius: '12px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', border: '1px solid var(--stitch-outline-variant)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--stitch-primary-container)', color: 'var(--stitch-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '18px' }}>
+                        <div key={prof.id} className="stitch-card" style={{ borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', backgroundColor: '#FFFFFF' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(59,130,246,0.08)', color: 'var(--stitch-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '20px' }}>
                                     {prof.nombre_completo.charAt(0)}
                                 </div>
                                 <div>
-                                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--stitch-on-surface)' }}>{prof.nombre_completo}</h4>
-                                    <span style={{ fontSize: '12px', color: 'var(--stitch-on-surface-variant)' }}>Profesor Titular ({prof.codigo_ua})</span>
+                                    <h4 className="stitch-title-font" style={{ margin: 0, fontSize: '15px', fontWeight: '800', color: 'var(--stitch-primary)' }}>
+                                        {prof.nombre_completo}
+                                    </h4>
+                                    <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)', fontWeight: '600' }}>
+                                        Profesor Titular ({prof.codigo_ua})
+                                    </span>
                                 </div>
                             </div>
 
-                            <div style={{ fontSize: '13px', color: 'var(--stitch-on-surface)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div style={{ fontSize: '13px', color: 'var(--stitch-text-primary)', display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--stitch-border)', paddingTop: '14px' }}>
                                 <span><strong>Email:</strong> {prof.correo_recuperacion}</span>
                                 <span><strong>Teléfono:</strong> {prof.telefono_personal || 'No registrado'}</span>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                                 <button 
-                                    className="st-button st-button-outlined"
+                                    type="button"
+                                    className="stitch-button"
                                     onClick={() => handleVerHorario(prof)}
-                                    style={{ flex: 1, padding: '8px', fontSize: '12px', border: '1px solid var(--stitch-primary)', borderRadius: '8px', background: 'transparent', color: 'var(--stitch-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                                    style={{ flex: 1, padding: '8px 12px', fontSize: '12px', justifyContent: 'center', gap: '6px' }}
                                 >
-                                    <span className="material-icons-outlined" style={{ fontSize: '15px' }}>calendar_month</span>
-                                    Ver Horarios
+                                    <span className="material-icons-outlined" style={{ fontSize: '16px' }}>calendar_month</span>
+                                    Ver Horarios e Info
                                 </button>
                             </div>
                         </div>
@@ -139,36 +158,44 @@ export default function ControlProfesores() {
                 </div>
             )}
 
-            {/* MODAL DRAWER DE HORARIO Y HOJA DE VIDA */}
+            {/* ── MODAL DRAWER DE HORARIO Y HOJA DE VIDA ── */}
             {profSeleccionado && (
-                <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px' }} onClick={() => setProfSeleccionado(null)}>
-                    <div style={{ background: 'var(--stitch-surface)', borderRadius: '16px', width: '100%', maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto', padding: '24px', boxShadow: '0 12px 40px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+                <div className="stitch-modal-backdrop" onClick={() => setProfSeleccionado(null)}>
+                    <div className="stitch-modal-content" style={{ width: '100%', maxWidth: '850px', maxHeight: '90vh', overflowY: 'auto', padding: '28px', backgroundColor: '#FFFFFF' }} onClick={e => e.stopPropagation()}>
                         
-                        {/* Cabecera */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--stitch-outline-variant)', paddingBottom: '16px', marginBottom: '20px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--stitch-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 600, color: '#fff' }}>
+                        {/* Cabecera Modal */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--stitch-border)', paddingBottom: '16px', marginBottom: '20px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--stitch-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: '800', color: '#fff' }}>
                                     {profSeleccionado.nombre_completo.charAt(0)}
                                 </div>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--stitch-on-surface)' }}>{profSeleccionado.nombre_completo}</h3>
-                                    <span style={{ fontSize: '13px', color: 'var(--stitch-on-surface-variant)' }}>Código: {profSeleccionado.codigo_ua}</span>
+                                    <h3 className="stitch-title-font" style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: 'var(--stitch-primary)' }}>
+                                        {profSeleccionado.nombre_completo}
+                                    </h3>
+                                    <span style={{ fontSize: '12px', color: 'var(--stitch-text-secondary)', fontWeight: '600' }}>
+                                        Código Docente: {profSeleccionado.codigo_ua}
+                                    </span>
                                 </div>
                             </div>
-                            <button onClick={() => setProfSeleccionado(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--stitch-on-surface-variant)' }}>
-                                <span className="material-icons-outlined">close</span>
+                            <button 
+                                type="button" 
+                                onClick={() => setProfSeleccionado(null)} 
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--stitch-text-secondary)', fontSize: '24px', lineHeight: 1 }}
+                            >
+                                ×
                             </button>
                         </div>
 
                         {loadingHorario ? (
-                            <div style={{ textAlign: 'center', padding: '40px' }}>
-                                <span className="material-icons-outlined" style={{ animation: 'spin 1s linear infinite', color: 'var(--stitch-primary)' }}>sync</span>
-                                <p style={{ fontSize: '13px', color: 'var(--stitch-on-surface-variant)' }}>Cargando horarios y ficha...</p>
+                            <div style={{ textAlign: 'center', padding: '50px 0' }}>
+                                <span className="material-icons-outlined" style={{ animation: 'spin 1s linear infinite', color: 'var(--stitch-primary)', fontSize: '32px' }}>sync</span>
+                                <p style={{ fontSize: '13px', color: 'var(--stitch-text-secondary)', marginTop: '8px' }}>Cargando horarios y ficha...</p>
                             </div>
                         ) : horarioData ? (
                             <div>
                                 {/* Ficha Administrativa / Laboral */}
-                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '24px', padding: '14px', background: 'var(--stitch-background)', borderRadius: '10px', border: '1px dashed var(--stitch-outline)', fontSize: '13px' }}>
+                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '24px', padding: '16px', background: 'var(--stitch-background)', borderRadius: '8px', border: '1px solid var(--stitch-border)', fontSize: '13px' }}>
                                     <div style={{ flex: 1, minWidth: '150px' }}>
                                         <strong>Fecha de Contratación:</strong> {horarioData.ficha_laboral ? new Date(horarioData.ficha_laboral.fecha_contratacion).toLocaleDateString() : 'No registrada'}
                                     </div>
@@ -222,7 +249,7 @@ export default function ControlProfesores() {
                 </div>
             )}
 
-            {/* Toast */}
+            {/* Toast de Notificación */}
             {toast && (
                 <div style={{ position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)', background: toast.tipo === 'success' ? 'var(--stitch-success)' : 'var(--stitch-error)', color: '#fff', padding: '12px 24px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', zIndex: 2000, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
                     <span className="material-icons-outlined" style={{ fontSize: '18px' }}>{toast.tipo === 'success' ? 'check_circle' : 'error'}</span>

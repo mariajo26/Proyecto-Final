@@ -15,12 +15,15 @@
   --stitch-success: #10B981;        /* Verde / Asistencias y Aprobaciones */
   --stitch-warning: #F59E0B;        /* Amarillo-Oro / Retrasos y Alertas */
   --stitch-danger: #EF4444;         /* Rojo-Coral / Faltas e Incumplimientos */
+  --stitch-error: #EF4444;          /* Rojo-Coral / Fallas e Incumplimientos */
+  --stitch-error-container: #FEE2E2;/* Rojo Muy Claro / Contenedores de Alerta */
   --stitch-info: #6366F1;           /* Indigo / Informativas y Foros */
   
   /* Textos y Bordes */
   --stitch-text-primary: #1E293B;   /* Gris Oscuro / Texto Principal */
   --stitch-text-secondary: #64748B; /* Gris Medio / Subtítulos y Metadatos */
   --stitch-border: #E2E8F0;         /* Gris Muy Claro / Líneas Divisoras */
+  --stitch-outline-variant: #E2E8F0;/* Gris Claro / Bordes de Acento */
   --stitch-hover: #F1F5F9;          /* Gris Sutil / Estados Hover */
 
   /* Fuentes y Sombras */
